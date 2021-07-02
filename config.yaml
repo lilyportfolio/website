@@ -1,4 +1,4 @@
-baseURL = "https://lilyportfolio.github.io/DataScience/"
+baseURL = "http://www.example.com/"
 languageCode = "en-us"
 title = "Lily's portfolio"
 theme = "mediumish"
