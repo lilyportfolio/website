@@ -1,0 +1,109 @@
+---
+title: "Project 1 - Seattle Crime"
+date: 2021-07-01T21:42:38-07:00
+publishdate: 2021-07-01T21:42:38-07:00
+tags: [Analytics]
+comments: true
+---
+
+This notebook is an in-depth analysis of Seattle Police Department (SPD) Crimes Data downloaded from [Seattle Open Data](https://data.seattle.gov/Public-Safety/SPD-Crime-Data-2008-Present/tazs-3rd5) on June 30th 2021. 
+
+
+```{r, echo=FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+```
+
+```{r}
+# load csv file.
+crimes = read.csv(file = "SEACrimes_2008_Present.csv")
+```
+
+```{r}
+# Format date and time for later data extraction.
+crimes$Report.DateTime = as.POSIXct(as.character(crimes$Report.DateTime), format =  "%m/%d/%Y %H:%M")
+crimes$Report.Date = as.Date(crimes$Report.DateTime)
+crimes = separate(crimes, Report.Date, c("Report.Year", "Report.Month", "Report.Day"), sep = "[-]")
+
+crimes$Report.Time = format(crimes$Report.DateTime, "%T")
+crimes = separate(crimes, Report.Time, c("Report.Hour", "Report.Min", "Report.Sec"), sep = "[:]")
+```
+
+```{r}
+# Remove 2021 data, only taking complete year reports
+crimes.pre2021 = filter(crimes, Report.Year <=2020)
+
+crimes.pre2021.year = crimes.pre2021 %>% 
+  group_by(Report.Year) %>% 
+  summarise(count=n()) %>% 
+  mutate(percent = count/sum(count))
+
+ggplot(data = crimes.pre2021.year, mapping=aes(x=Report.Year, y=percent)) + 
+  geom_point() +
+  geom_line(group = 1) +
+  labs(x = "Year", y = "Fraction of crimes committed", title = "Percentage of crimes committed each year") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+Above plot shows that crime rates in Seattle decreased in the year 2011-2012, then steadily increases starting in 2013, with the highest rate in 2020. Let's compare these two years in terms of type of Offenses.
+
+```{r, fig.align="center", fig.height = 8, fig.width = 8}
+
+year.pre2021 = crimes.pre2021 %>% 
+  group_by(Offense, Report.Year) %>% 
+  summarise(count=n())
+year.pre2021= mutate(year.pre2021,
+                     percent = count/sum(year.pre2021$count))
+
+# Create a reference data frame with all crimes in each year for later comparison.
+year.no.facet = subset(year.pre2021, select = c("percent", "Offense"))
+
+year.12.20 = filter(year.pre2021, Report.Year ==2020 | Report.Year ==2012)
+
+# Create plot showing the percentage of crimes committed in 2012 and 2020 respective to all crimes in the same year
+ggplot(data = year.12.20, mapping=aes(x = percent, y = Offense)) + 
+  geom_point(data = year.no.facet, color="grey", size = 1.5) +
+  geom_point(size = 1.0) + facet_wrap(~Report.Year) +
+  labs(x = "Fraction of crimes committed", y = "Crimes", title = "Fraction of crimes committed in 2012 and 2020 by offense type") + theme(plot.title = element_text(hjust = 0))
+
+```
+
+Interestingly, other than **Identity Theft** which occurred at at the highest rate in 2020 compared to other years, the other most occurring crimes (in terms of fraction compared to total crimes in the year) seem to happen at a fairly similar rate. Those crimes include:
+
+- Theft from Motor Vehicle
+- Simple Assault
+- Shoplifting
+- Motor Vehicle Theft
+- Destruction/Damage/Vandalism of Property
+- Burglary/Breaking & Entering
+- All Other Larceny
+- Aggravated Assault
+
+
+Let's now take a closer look at crimes in 2020, the year with the highest crime occurrences.
+
+```{r, fig.align="center", fig.height = 8, fig.width = 8}
+
+crimes.2020 = filter(crimes, Report.Year == 2020)
+
+crimes.2020.offense = filter(crimes.2020, Offense == "Theft from Motor Vehicle" | Offense == "Simple Assault" | Offense == "Motor Vehicle Theft" | Offense == "Identity Theft" | Offense == "Destruction/Damage/Vandalism of Property" | Offense == "Burglary/Breaking & Entering" | Offense == "All Other Larceny")
+
+hour.2020 = crimes.2020.offense %>% 
+  group_by(Report.Hour) %>% 
+  summarise(count=n()) %>% 
+  mutate(percent = count/sum(count))
+
+hour.2020.offense = crimes.2020.offense %>% 
+  group_by(Offense, Report.Hour) %>% 
+  summarise(count=n()) %>% 
+  mutate(percent = count/sum(count))
+
+ggplot(data = hour.2020.offense, mapping=aes(x=Report.Hour, y=percent)) + 
+  geom_point(size=0.5) + geom_line(color = "blue", group =1) + facet_wrap("Offense", ncol = 2) + 
+  geom_line(data = hour.2020, mapping=aes(x=Report.Hour, y=percent), color = "grey", group=1) +
+  labs(x = "Hour", y = "Fraction of crimes committed", title = "Percentage of crimes committed each hour by offense type") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+   scale_x_discrete(breaks = c("00", "04", "08", "12", "16", "20", "24"), labels = c("0", "4", "8", "12", "16", "20", "24"))
+```
+
