@@ -40,7 +40,7 @@ Learning everyday about my new passion: Data Science!
     name = "Projects"
     weight = 100
     identifier = "projects"
-    url = "/projects"
+    url = "/project"
 [[menu.main]]
     name = "About Me"
     identifier = "about"
