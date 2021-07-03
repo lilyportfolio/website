@@ -33,6 +33,8 @@ crimes$Report.Time = format(crimes$Report.DateTime, "%T")
 crimes = separate(crimes, Report.Time, c("Report.Hour", "Report.Min", "Report.Sec"), sep = "[:]")
 ```
 
+If we examine the occurrence of crimes each year (2008-2020, 2021 removed due to partial data) as a fraction of total crimes, we get the following plot:
+
 ```{r, echo=FALSE}
 # Remove 2021 data, only taking complete year reports
 crimes.pre2021 = filter(crimes, Report.Year <=2020)
@@ -49,7 +51,7 @@ ggplot(data = crimes.pre2021.year, mapping=aes(x=Report.Year, y=percent)) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-Above plot shows that crime rates in Seattle decreased in the year 2011-2012, then steadily increases starting in 2013, with the highest rate in 2020. Let's compare these two years in terms of type of Offenses.
+Above plot shows that crime rates in Seattle decreased in the year *2011-2012*, then steadily increases starting in 2013, with the highest rate in *2020*. That could be interesting. Let's compare these two years in terms of type of Offenses to see if we can detect any differences.
 
 ```{r, fig.align="center", fig.height = 8, fig.width = 8, echo=FALSE, message=FALSE}
 
@@ -72,7 +74,7 @@ ggplot(data = year.12.20, mapping=aes(x = percent, y = Offense)) +
 
 ```
 
-Interestingly, other than **Identity Theft** which occurred at at the highest rate in 2020 compared to other years, the other most occurring crimes (in terms of fraction compared to total crimes in the year) seem to happen at a fairly similar rate. Those crimes include:
+Interestingly (or not), other than **Identity Theft** which occurred at at the highest rate in 2020 compared to all previous years, the other most occurring crimes (in terms of fraction compared to total crimes in the year) seem to happen at a fairly similar rate. Those crimes include:
 
 - Theft from Motor Vehicle
 - Simple Assault
@@ -83,8 +85,8 @@ Interestingly, other than **Identity Theft** which occurred at at the highest ra
 - All Other Larceny
 - Aggravated Assault
 
-
-Let's now take a closer look at crimes in 2020, the year with the highest crime occurrences.
+Let's then examine those crimes in the year 2020, which remember, was the year with the highest crime occurrences.
+First, do the crimes differ in terms of hour of the day?
 
 ```{r, fig.align="center", fig.height = 8, fig.width = 8, echo=FALSE, message=FALSE}
 
@@ -110,3 +112,10 @@ ggplot(data = hour.2020.offense, mapping=aes(x=Report.Hour, y=percent)) +
    scale_x_discrete(breaks = c("00", "04", "08", "12", "16", "20", "24"), labels = c("0", "4", "8", "12", "16", "20", "24"))
 ```
 
+Compared to the overall crime occurrence trend line (in gray), a few observations stand out:
+
+- Identity theft is very high during working hours and remains after 16:00.
+  + It could be that only during wake hours people realized that they experienced identity theft.
+  + It could be that this kind of crime do not require immediate attention and could be deferred for reporting during working hours.
+  
+- 
