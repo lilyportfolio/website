@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Statics on Lily&#39;s portfolio</title>
+    <link>https://lilyportfolio.netlify.app/static/</link>
+    <description>Recent content in Statics on Lily&#39;s portfolio</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Xue (Lily) Yang - All rights reserved 2021</copyright><atom:link href="https://lilyportfolio.netlify.app/static/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>About</title>
+      <link>https://lilyportfolio.netlify.app/static/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://lilyportfolio.netlify.app/static/about/</guid>
+      <description>Me Current Business Intelligence and Data Analytics student at Carnegie Mellon University (MSIT-BIDA) with 9+ years of experience in the healthcare industry and entry-level management experience.</description>
+    </item>
+    
+    <item>
+      <title>Contact info</title>
+      <link>https://lilyportfolio.netlify.app/static/contacts/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://lilyportfolio.netlify.app/static/contacts/</guid>
+      <description> email: xueyang2@andrew.cmu.edu github: https://github.com/lilyportfolio linkedin: https://www.linkedin.com/in/lily-y-39507787/ website: https://lilyportfolio.netlify.app/  </description>
+    </item>
+    
+  </channel>
+</rss>

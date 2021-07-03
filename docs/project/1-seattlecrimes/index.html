@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en-us"><head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="generator" content="Hugo 0.84.4" />
+	
+	<title>Project 1 - Seattle Crime | Lily&#39;s portfolio</title>
+	
+	
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lilyportfolio.netlify.app/project/1-seattlecrimes/cover.gif"/>
+<meta name="twitter:title" content="Project 1 - Seattle Crime"/>
+<meta name="twitter:description" content="This notebook is an in-depth analysis of Seattle Police Department (SPD) Crimes Data downloaded from Seattle Open Data on June 30th 2021.
+## ## Attaching package: &#39;dplyr&#39;## The following objects are masked from &#39;package:stats&#39;:## ## filter, lag## The following objects are masked from &#39;package:base&#39;:## ## intersect, setdiff, setequal, union# load csv file."/>
+
+	<meta property="og:title" content="Project 1 - Seattle Crime" />
+<meta property="og:description" content="This notebook is an in-depth analysis of Seattle Police Department (SPD) Crimes Data downloaded from Seattle Open Data on June 30th 2021.
+## ## Attaching package: &#39;dplyr&#39;## The following objects are masked from &#39;package:stats&#39;:## ## filter, lag## The following objects are masked from &#39;package:base&#39;:## ## intersect, setdiff, setequal, union# load csv file." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lilyportfolio.netlify.app/project/1-seattlecrimes/" /><meta property="og:image" content="https://lilyportfolio.netlify.app/project/1-seattlecrimes/cover.gif"/><meta property="article:section" content="project" />
+<meta property="article:published_time" content="2021-07-01T21:42:38-07:00" />
+<meta property="article:modified_time" content="2021-07-01T21:42:38-07:00" />
+
+
+
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+	 crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/css?family=Righteous%7CMerriweather:300,300i,400,400i,700,700i" rel="stylesheet">
+	<link href="https://lilyportfolio.netlify.app/css/medium.css" rel="stylesheet">
+	<link href="https://lilyportfolio.netlify.app/css/additional.css" rel="stylesheet">
+
+	
+	
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top mediumnavigation nav-down">
+    <div class="container pr-0">
+        
+        <a class="navbar-brand" href="https://lilyportfolio.netlify.app/">
+
+            
+            <span style="font-family:Righteous;">Lily&#39;s portfolio</span>
+            
+        </a>
+        
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMediumish" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        
+        <div class="collapse navbar-collapse" id="navbarMediumish">
+            
+            <ul class="navbar-nav ml-auto">
+                 
+                <li class="nav-item ">
+                    <a class="nav-link" href="https://lilyportfolio.netlify.app/projects">Projects</a>
+                </li>
+                 
+                <li class="nav-item ">
+                    <a class="nav-link" href="https://lilyportfolio.netlify.app/static/about">About Me</a>
+                </li>
+                 
+                <li class="nav-item ">
+                    <a class="nav-link" href="https://lilyportfolio.netlify.app/static/contacts">Contact Me</a>
+                </li>
+                
+            </ul>
+        </div>
+        
+    </div>
+</nav>
+
+
+        <div class="site-content">   
+            <div class="container">
+<div class="mainheading">
+    <h1 class="sitetitle">Lily&#39;s portfolio</h1>
+    <p class="lead">
+         Learning about Data everyday~
+    </p>
+</div><div class="main-content">
+        
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-md-2 pl-0"><div class="share sticky-top sticky-top-offset">
+    <p>Share</p>
+    <ul>
+        <li class="ml-1 mr-1">
+        <a target="_blank" href="https://twitter.com/intent/tweet?text=Project%201%20-%20Seattle%20Crime&url=https%3a%2f%2flilyportfolio.netlify.app%2fproject%2f1-seattlecrimes%2f" onclick="window.open(this.href, 'twitter-share', 'width=550,height=435');return false;">
+        <i class="fab fa-twitter"></i>
+        </a>
+        </li>
+        
+        <li class="ml-1 mr-1">
+        <a target="_blank" href="https://facebook.com/sharer.php?u=https%3a%2f%2flilyportfolio.netlify.app%2fproject%2f1-seattlecrimes%2f" onclick="window.open(this.href, 'facebook-share', 'width=550,height=435');return false;">
+        <i class="fab fa-facebook-f"></i>
+        </a>
+        </li>
+
+        <li class="ml-1 mr-1">
+        <a target="_blank" href="https://www.xing.com/spi/shares/new?url=https%3a%2f%2flilyportfolio.netlify.app%2fproject%2f1-seattlecrimes%2f" onclick="window.open(this.href, 'xing-share', 'width=550,height=435');return false;">
+        <i class="fab fa-xing"></i>
+        </a>
+        </li>        
+    </ul>
+
+    
+        <div class="sep">
+        </div>				
+        <ul>
+            <li> 
+            <a  class="small smoothscroll" href="#disqus_thread"></a>
+            </li>
+        </ul>
+    
+</div>
+</div>
+                                
+                <div class="col-md-9 flex-first flex-md-unordered">
+                    <div class="mainheading">
+                        	
+                        
+                        
+                        
+                        <div class="row post-top-meta">
+                            <div class="col-xs-12 col-md-3 col-lg-2 text-center text-md-left mb-4 mb-md-0 md-nopad-right">
+                                <img class="author-thumb" src="https://lilyportfolio.netlify.app/images/author.png" alt="Xue (Lily) Yang">
+                            </div>
+                            <div class="col-xs-12 col-md-9 col-lg-10 text-center text-md-left md-nopad-left">
+                                <a target="_blank" class="link-dark">Xue (Lily) Yang</a><br>
+                                <span class="author-description">
+                                    Data Science/Analytics student<br>
+                                    <i class="far fa-star"></i>
+                                    Jul 1, 2021
+                                    <i class="far fa-clock clock"></i>
+                                    3 min read
+                                </span>					
+                            </div>
+                        </div>			
+                        	
+                        
+                                                
+                        
+                        <h1 class="posttitle">Project 1 - Seattle Crime</h1> 
+                    </div>
+
+                    
+                    
+                    
+                        <img class="featured-image img-fluid" src="https://lilyportfolio.netlify.app/project/1-seattlecrimes/cover.gif" alt="thumbnail for this post">
+                    
+                    
+
+                    
+                    <div class="article-post">
+                        
+<script src="https://lilyportfolio.netlify.app/project/1-seattlecrimes/index_files/header-attrs/header-attrs.js"></script>
+
+
+<p>This notebook is an in-depth analysis of Seattle Police Department (SPD) Crimes Data downloaded from <a href="https://data.seattle.gov/Public-Safety/SPD-Crime-Data-2008-Present/tazs-3rd5">Seattle Open Data</a> on June 30th 2021.</p>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;
+## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag
+## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code># load csv file.
+crimes = read.csv(file = &quot;SEACrimes_2008_Present.csv&quot;)</code></pre>
+<pre class="r"><code># Format date and time for later data extraction.
+crimes$Report.DateTime = as.POSIXct(as.character(crimes$Report.DateTime), format =  &quot;%m/%d/%Y %H:%M&quot;)
+crimes$Report.Date = as.Date(crimes$Report.DateTime)
+crimes = separate(crimes, Report.Date, c(&quot;Report.Year&quot;, &quot;Report.Month&quot;, &quot;Report.Day&quot;), sep = &quot;[-]&quot;)
+
+crimes$Report.Time = format(crimes$Report.DateTime, &quot;%T&quot;)
+crimes = separate(crimes, Report.Time, c(&quot;Report.Hour&quot;, &quot;Report.Min&quot;, &quot;Report.Sec&quot;), sep = &quot;[:]&quot;)</code></pre>
+<pre class="r"><code># Remove 2021 data, only taking complete year reports
+crimes.pre2021 = filter(crimes, Report.Year &lt;=2020)
+
+crimes.pre2021.year = crimes.pre2021 %&gt;% 
+  group_by(Report.Year) %&gt;% 
+  summarise(count=n()) %&gt;% 
+  mutate(percent = count/sum(count))
+
+ggplot(data = crimes.pre2021.year, mapping=aes(x=Report.Year, y=percent)) + 
+  geom_point() +
+  geom_line(group = 1) +
+  labs(x = &quot;Year&quot;, y = &quot;Fraction of crimes committed&quot;, title = &quot;Percentage of crimes committed each year&quot;) +
+  theme(plot.title = element_text(hjust = 0.5))</code></pre>
+<p><img src="https://lilyportfolio.netlify.app/project/1-seattlecrimes/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Above plot shows that crime rates in Seattle decreased in the year 2011-2012, then steadily increases starting in 2013, with the highest rate in 2020. Let’s compare these two years in terms of type of Offenses.</p>
+<pre class="r"><code>
+year.pre2021 = crimes.pre2021 %&gt;% 
+  group_by(Offense, Report.Year) %&gt;% 
+  summarise(count=n())
+## `summarise()` has grouped output by &#39;Offense&#39;. You can override using the `.groups` argument.
+year.pre2021= mutate(year.pre2021,
+                     percent = count/sum(year.pre2021$count))
+
+# Create a reference data frame with all crimes in each year for later comparison.
+year.no.facet = subset(year.pre2021, select = c(&quot;percent&quot;, &quot;Offense&quot;))
+
+year.12.20 = filter(year.pre2021, Report.Year ==2020 | Report.Year ==2012)
+
+# Create plot showing the percentage of crimes committed in 2012 and 2020 respective to all crimes in the same year
+ggplot(data = year.12.20, mapping=aes(x = percent, y = Offense)) + 
+  geom_point(data = year.no.facet, color=&quot;grey&quot;, size = 1.5) +
+  geom_point(size = 1.0) + facet_wrap(~Report.Year) +
+  labs(x = &quot;Fraction of crimes committed&quot;, y = &quot;Crimes&quot;, title = &quot;Fraction of crimes committed in 2012 and 2020 by offense type&quot;) + theme(plot.title = element_text(hjust = 0))</code></pre>
+<p><img src="https://lilyportfolio.netlify.app/project/1-seattlecrimes/index_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>Interestingly, other than <strong>Identity Theft</strong> which occurred at at the highest rate in 2020 compared to other years, the other most occurring crimes (in terms of fraction compared to total crimes in the year) seem to happen at a fairly similar rate. Those crimes include:</p>
+<ul>
+<li>Theft from Motor Vehicle</li>
+<li>Simple Assault</li>
+<li>Shoplifting</li>
+<li>Motor Vehicle Theft</li>
+<li>Destruction/Damage/Vandalism of Property</li>
+<li>Burglary/Breaking &amp; Entering</li>
+<li>All Other Larceny</li>
+<li>Aggravated Assault</li>
+</ul>
+<p>Let’s now take a closer look at crimes in 2020, the year with the highest crime occurrences.</p>
+<pre class="r"><code>
+crimes.2020 = filter(crimes, Report.Year == 2020)
+
+crimes.2020.offense = filter(crimes.2020, Offense == &quot;Theft from Motor Vehicle&quot; | Offense == &quot;Simple Assault&quot; | Offense == &quot;Motor Vehicle Theft&quot; | Offense == &quot;Identity Theft&quot; | Offense == &quot;Destruction/Damage/Vandalism of Property&quot; | Offense == &quot;Burglary/Breaking &amp; Entering&quot; | Offense == &quot;All Other Larceny&quot;)
+
+hour.2020 = crimes.2020.offense %&gt;% 
+  group_by(Report.Hour) %&gt;% 
+  summarise(count=n()) %&gt;% 
+  mutate(percent = count/sum(count))
+
+hour.2020.offense = crimes.2020.offense %&gt;% 
+  group_by(Offense, Report.Hour) %&gt;% 
+  summarise(count=n()) %&gt;% 
+  mutate(percent = count/sum(count))
+## `summarise()` has grouped output by &#39;Offense&#39;. You can override using the `.groups` argument.
+
+ggplot(data = hour.2020.offense, mapping=aes(x=Report.Hour, y=percent)) + 
+  geom_point(size=0.5) + geom_line(color = &quot;blue&quot;, group =1) + facet_wrap(&quot;Offense&quot;, ncol = 2) + 
+  geom_line(data = hour.2020, mapping=aes(x=Report.Hour, y=percent), color = &quot;grey&quot;, group=1) +
+  labs(x = &quot;Hour&quot;, y = &quot;Fraction of crimes committed&quot;, title = &quot;Percentage of crimes committed each hour by offense type&quot;) + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+   scale_x_discrete(breaks = c(&quot;00&quot;, &quot;04&quot;, &quot;08&quot;, &quot;12&quot;, &quot;16&quot;, &quot;20&quot;, &quot;24&quot;), labels = c(&quot;0&quot;, &quot;4&quot;, &quot;8&quot;, &quot;12&quot;, &quot;16&quot;, &quot;20&quot;, &quot;24&quot;))</code></pre>
+<p><img src="https://lilyportfolio.netlify.app/project/1-seattlecrimes/index_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
+
+                    </div>
+                    
+                    
+                    <div class="after-post-tags">
+                        <ul class="tags">
+                        
+                        <li>
+                        <a href="https://lilyportfolio.netlify.app/tags/analytics">Analytics</a>
+                        </li>
+                        
+                        </ul>
+                    </div>
+                    
+                    
+                    
+                    <div class="row PageNavigation d-flex justify-content-between font-weight-bold">
+                    
+                    
+                    <div class="clearfix"></div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+<div class="container">
+    <div id="comments" class="row justify-content-center mb-5">
+        <div class="col-md-8">              
+                           
+        </div>
+    </div>
+</div>
+
+    </div>
+
+
+            </div>
+<div class="jumbotron fortags">
+	<div class="d-md-flex h-100">
+		<div class="col-md-4 transpdark align-self-center text-center h-100">
+			<div class="d-md-flex align-items-center justify-content-center h-100">
+				<h2 class="d-md-block d-none align-self-center py-1 font-weight-light">Explore <span class="d-none d-md-inline">→</span></h2>
+			</div>
+		</div>
+		<div class="col-md-8 p-5 align-self-center text-center">
+			
+			<a class="mt-1 mb-1" href="https://lilyportfolio.netlify.app/tags/analytics">analytics</a>
+			
+		</div>
+	</div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 text-center text-lg-left">
+                &copy; Copyright Xue (Lily) Yang - All rights reserved 2021
+            </div>
+            <div class="col-md-6 col-sm-6 text-center text-lg-right">    
+                <a target="_blank" rel="noopener" href="https://www.wowthemes.net">Mediumish Theme</a> by WowThemes.net
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+        </div>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script src="https://lilyportfolio.netlify.app/js/mediumish.js"></script>
+
+    </body>
+</html>
