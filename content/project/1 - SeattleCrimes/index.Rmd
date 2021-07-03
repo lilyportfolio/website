@@ -12,7 +12,7 @@ knitr::opts_chunk$set(collapse = TRUE)
 This notebook is an in-depth analysis of Seattle Police Department (SPD) Crimes Data downloaded from [Seattle Open Data](https://data.seattle.gov/Public-Safety/SPD-Crime-Data-2008-Present/tazs-3rd5) on June 30th 2021. 
 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE,message=FALSE}
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -51,7 +51,7 @@ ggplot(data = crimes.pre2021.year, mapping=aes(x=Report.Year, y=percent)) +
 
 Above plot shows that crime rates in Seattle decreased in the year 2011-2012, then steadily increases starting in 2013, with the highest rate in 2020. Let's compare these two years in terms of type of Offenses.
 
-```{r, fig.align="center", fig.height = 8, fig.width = 8, echo=FALSE}
+```{r, fig.align="center", fig.height = 8, fig.width = 8, echo=FALSE, message=FALSE}
 
 year.pre2021 = crimes.pre2021 %>% 
   group_by(Offense, Report.Year) %>% 
@@ -86,7 +86,7 @@ Interestingly, other than **Identity Theft** which occurred at at the highest ra
 
 Let's now take a closer look at crimes in 2020, the year with the highest crime occurrences.
 
-```{r, fig.align="center", fig.height = 8, fig.width = 8, echo=FALSE}
+```{r, fig.align="center", fig.height = 8, fig.width = 8, echo=FALSE, message=FALSE}
 
 crimes.2020 = filter(crimes, Report.Year == 2020)
 
