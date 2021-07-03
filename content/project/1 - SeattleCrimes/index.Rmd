@@ -18,12 +18,12 @@ library(tidyr)
 library(ggplot2)
 ```
 
-```{r}
+```{r, echo=FALSE}
 # load csv file.
 crimes = read.csv(file = "SEACrimes_2008_Present.csv")
 ```
 
-```{r}
+```{r, echo=FALSE}
 # Format date and time for later data extraction.
 crimes$Report.DateTime = as.POSIXct(as.character(crimes$Report.DateTime), format =  "%m/%d/%Y %H:%M")
 crimes$Report.Date = as.Date(crimes$Report.DateTime)
@@ -33,7 +33,7 @@ crimes$Report.Time = format(crimes$Report.DateTime, "%T")
 crimes = separate(crimes, Report.Time, c("Report.Hour", "Report.Min", "Report.Sec"), sep = "[:]")
 ```
 
-```{r}
+```{r, echo=FALSE}
 # Remove 2021 data, only taking complete year reports
 crimes.pre2021 = filter(crimes, Report.Year <=2020)
 
@@ -51,7 +51,7 @@ ggplot(data = crimes.pre2021.year, mapping=aes(x=Report.Year, y=percent)) +
 
 Above plot shows that crime rates in Seattle decreased in the year 2011-2012, then steadily increases starting in 2013, with the highest rate in 2020. Let's compare these two years in terms of type of Offenses.
 
-```{r, fig.align="center", fig.height = 8, fig.width = 8}
+```{r, fig.align="center", fig.height = 8, fig.width = 8, echo=FALSE}
 
 year.pre2021 = crimes.pre2021 %>% 
   group_by(Offense, Report.Year) %>% 
@@ -86,7 +86,7 @@ Interestingly, other than **Identity Theft** which occurred at at the highest ra
 
 Let's now take a closer look at crimes in 2020, the year with the highest crime occurrences.
 
-```{r, fig.align="center", fig.height = 8, fig.width = 8}
+```{r, fig.align="center", fig.height = 8, fig.width = 8, echo=FALSE}
 
 crimes.2020 = filter(crimes, Report.Year == 2020)
 
