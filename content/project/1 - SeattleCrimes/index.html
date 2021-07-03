@@ -1,18 +1,26 @@
 ---
 title: "Project 1 - Seattle Crime"
-date: 2021-07-01T21:42:38-07:00
-tags: [Analytics]
-comments: true
+date: '2021-07-01T21:42:38-07:00'
+tags: Analytics
+comments: yes
 ---
 
 <script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
 
 
-<p>This notebook is an in-depth analysis of Seattle Police Department (SPD) Crimes Data downloaded from <a href="https://data.seattle.gov/Public-Safety/SPD-Crime-Data-2008-Present/tazs-3rd5">Seattle Open Data</a> on June 30th 2021.</p>
+<p><strong>Context</strong></p>
+<p>Year 2020 was full of surprises, especially in Seattle. The historical cancellation of the New Year’s fireworks seemed to be the premonition of the year to come. Grasped with the pandemic and social unrest, headlines of frequent crimes along with the police defunding movement, it makes one question if crime is actually on the rise in Seattle. This became the inspiration for this project.</p>
+<p><em>How I did this</em>
+This notebook is an in-depth analysis of Seattle Crimes using:
+- Seattle Police Department (SPD) Crimes Data downloaded from <a href="https://data.seattle.gov/Public-Safety/SPD-Crime-Data-2008-Present/tazs-3rd5">Seattle Open Data</a> on June 30th 2021.
+- Population estimate for Seattle City from the US Census Bureau for <a href="https://www.census.gov/data/datasets/time-series/demo/popest/intercensal-2000-2010-cities-and-towns.html">2000-2010</a> and <a href="https://www.census.gov/data/datasets/time-series/demo/popest/2010s-total-cities-and-towns.html">2010-2019</a> downloaded on June 30th 2021.
++ Population estimates for 2020 were copied from 2019 as no new data is available yet.</p>
+<pre><code>## New names:
+## * `` -&gt; ...1</code></pre>
 <p>If we examine the occurrence of crimes each year (2008-2020, 2021 removed due to partial data) as a fraction of total crimes, we get the following plot:</p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>Above plot shows that crime rates in Seattle decreased in the year <em>2011-2012</em>, then steadily increases starting in 2013, with the highest rate in <em>2020</em>. That could be interesting. Let’s compare these two years in terms of type of Offenses to see if we can detect any differences.</p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-1.png" width="672" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>Interestingly (or not), other than <strong>Identity Theft</strong> which occurred at at the highest rate in 2020 compared to all previous years, the other most occurring crimes (in terms of fraction compared to total crimes in the year) seem to happen at a fairly similar rate. Those crimes include:</p>
 <ul>
 <li>Theft from Motor Vehicle</li>
@@ -26,7 +34,7 @@ comments: true
 </ul>
 <p>Let’s then examine those crimes in the year 2020, which remember, was the year with the highest crime occurrences.
 First, do the crimes differ in terms of hour of the day?</p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>Compared to the overall crime occurrence trend line (in gray), a few observations stand out:</p>
 <ul>
 <li><em>Identity theft</em> is very high during working hours and remains after 16:00.
