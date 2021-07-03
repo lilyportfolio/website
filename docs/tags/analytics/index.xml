@@ -15,7 +15,7 @@
       
       <guid>https://lilyportfolio.netlify.app/project/1-seattlecrimes/</guid>
       <description>This notebook is an in-depth analysis of Seattle Police Department (SPD) Crimes Data downloaded from Seattle Open Data on June 30th 2021.
-## ## Attaching package: &amp;#39;dplyr&amp;#39;## The following objects are masked from &amp;#39;package:stats&amp;#39;:## ## filter, lag## The following objects are masked from &amp;#39;package:base&amp;#39;:## ## intersect, setdiff, setequal, union# load csv file.</description>
+Above plot shows that crime rates in Seattle decreased in the year 2011-2012, then steadily increases starting in 2013, with the highest rate in 2020.</description>
     </item>
     
   </channel>
