@@ -17,48 +17,9 @@ comments: true
 ## The following objects are masked from &#39;package:base&#39;:
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code># load csv file.
-crimes = read.csv(file = &quot;SEACrimes_2008_Present.csv&quot;)</code></pre>
-<pre class="r"><code># Format date and time for later data extraction.
-crimes$Report.DateTime = as.POSIXct(as.character(crimes$Report.DateTime), format =  &quot;%m/%d/%Y %H:%M&quot;)
-crimes$Report.Date = as.Date(crimes$Report.DateTime)
-crimes = separate(crimes, Report.Date, c(&quot;Report.Year&quot;, &quot;Report.Month&quot;, &quot;Report.Day&quot;), sep = &quot;[-]&quot;)
-
-crimes$Report.Time = format(crimes$Report.DateTime, &quot;%T&quot;)
-crimes = separate(crimes, Report.Time, c(&quot;Report.Hour&quot;, &quot;Report.Min&quot;, &quot;Report.Sec&quot;), sep = &quot;[:]&quot;)</code></pre>
-<pre class="r"><code># Remove 2021 data, only taking complete year reports
-crimes.pre2021 = filter(crimes, Report.Year &lt;=2020)
-
-crimes.pre2021.year = crimes.pre2021 %&gt;% 
-  group_by(Report.Year) %&gt;% 
-  summarise(count=n()) %&gt;% 
-  mutate(percent = count/sum(count))
-
-ggplot(data = crimes.pre2021.year, mapping=aes(x=Report.Year, y=percent)) + 
-  geom_point() +
-  geom_line(group = 1) +
-  labs(x = &quot;Year&quot;, y = &quot;Fraction of crimes committed&quot;, title = &quot;Percentage of crimes committed each year&quot;) +
-  theme(plot.title = element_text(hjust = 0.5))</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>Above plot shows that crime rates in Seattle decreased in the year 2011-2012, then steadily increases starting in 2013, with the highest rate in 2020. Let’s compare these two years in terms of type of Offenses.</p>
-<pre class="r"><code>
-year.pre2021 = crimes.pre2021 %&gt;% 
-  group_by(Offense, Report.Year) %&gt;% 
-  summarise(count=n())
-## `summarise()` has grouped output by &#39;Offense&#39;. You can override using the `.groups` argument.
-year.pre2021= mutate(year.pre2021,
-                     percent = count/sum(year.pre2021$count))
-
-# Create a reference data frame with all crimes in each year for later comparison.
-year.no.facet = subset(year.pre2021, select = c(&quot;percent&quot;, &quot;Offense&quot;))
-
-year.12.20 = filter(year.pre2021, Report.Year ==2020 | Report.Year ==2012)
-
-# Create plot showing the percentage of crimes committed in 2012 and 2020 respective to all crimes in the same year
-ggplot(data = year.12.20, mapping=aes(x = percent, y = Offense)) + 
-  geom_point(data = year.no.facet, color=&quot;grey&quot;, size = 1.5) +
-  geom_point(size = 1.0) + facet_wrap(~Report.Year) +
-  labs(x = &quot;Fraction of crimes committed&quot;, y = &quot;Crimes&quot;, title = &quot;Fraction of crimes committed in 2012 and 2020 by offense type&quot;) + theme(plot.title = element_text(hjust = 0))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Offense&#39;. You can override using the `.groups` argument.</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>Interestingly, other than <strong>Identity Theft</strong> which occurred at at the highest rate in 2020 compared to other years, the other most occurring crimes (in terms of fraction compared to total crimes in the year) seem to happen at a fairly similar rate. Those crimes include:</p>
 <ul>
@@ -72,26 +33,5 @@ ggplot(data = year.12.20, mapping=aes(x = percent, y = Offense)) +
 <li>Aggravated Assault</li>
 </ul>
 <p>Let’s now take a closer look at crimes in 2020, the year with the highest crime occurrences.</p>
-<pre class="r"><code>
-crimes.2020 = filter(crimes, Report.Year == 2020)
-
-crimes.2020.offense = filter(crimes.2020, Offense == &quot;Theft from Motor Vehicle&quot; | Offense == &quot;Simple Assault&quot; | Offense == &quot;Motor Vehicle Theft&quot; | Offense == &quot;Identity Theft&quot; | Offense == &quot;Destruction/Damage/Vandalism of Property&quot; | Offense == &quot;Burglary/Breaking &amp; Entering&quot; | Offense == &quot;All Other Larceny&quot;)
-
-hour.2020 = crimes.2020.offense %&gt;% 
-  group_by(Report.Hour) %&gt;% 
-  summarise(count=n()) %&gt;% 
-  mutate(percent = count/sum(count))
-
-hour.2020.offense = crimes.2020.offense %&gt;% 
-  group_by(Offense, Report.Hour) %&gt;% 
-  summarise(count=n()) %&gt;% 
-  mutate(percent = count/sum(count))
-## `summarise()` has grouped output by &#39;Offense&#39;. You can override using the `.groups` argument.
-
-ggplot(data = hour.2020.offense, mapping=aes(x=Report.Hour, y=percent)) + 
-  geom_point(size=0.5) + geom_line(color = &quot;blue&quot;, group =1) + facet_wrap(&quot;Offense&quot;, ncol = 2) + 
-  geom_line(data = hour.2020, mapping=aes(x=Report.Hour, y=percent), color = &quot;grey&quot;, group=1) +
-  labs(x = &quot;Hour&quot;, y = &quot;Fraction of crimes committed&quot;, title = &quot;Percentage of crimes committed each hour by offense type&quot;) + 
-  theme(plot.title = element_text(hjust = 0.5)) + 
-   scale_x_discrete(breaks = c(&quot;00&quot;, &quot;04&quot;, &quot;08&quot;, &quot;12&quot;, &quot;16&quot;, &quot;20&quot;, &quot;24&quot;), labels = c(&quot;0&quot;, &quot;4&quot;, &quot;8&quot;, &quot;12&quot;, &quot;16&quot;, &quot;20&quot;, &quot;24&quot;))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Offense&#39;. You can override using the `.groups` argument.</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
