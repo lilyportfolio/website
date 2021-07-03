@@ -12,7 +12,6 @@ canonifyurls = true
 #googleAnalytics = "UA-1XXXXXXX1-1"
 
 [params]
-  logo = "/images/author.png"
   description ="Learning about Data everyday~"
   #mailchimp = "you can provide a mailchimp-link here"
 
