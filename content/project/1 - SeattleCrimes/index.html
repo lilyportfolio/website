@@ -9,10 +9,11 @@ comments: true
 
 
 <p>This notebook is an in-depth analysis of Seattle Police Department (SPD) Crimes Data downloaded from <a href="https://data.seattle.gov/Public-Safety/SPD-Crime-Data-2008-Present/tazs-3rd5">Seattle Open Data</a> on June 30th 2021.</p>
+<p>If we examine the occurrence of crimes each year (2008-2020, 2021 removed due to partial data) as a fraction of total crimes, we get the following plot:</p>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<p>Above plot shows that crime rates in Seattle decreased in the year 2011-2012, then steadily increases starting in 2013, with the highest rate in 2020. Let’s compare these two years in terms of type of Offenses.</p>
+<p>Above plot shows that crime rates in Seattle decreased in the year <em>2011-2012</em>, then steadily increases starting in 2013, with the highest rate in <em>2020</em>. That could be interesting. Let’s compare these two years in terms of type of Offenses to see if we can detect any differences.</p>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>Interestingly, other than <strong>Identity Theft</strong> which occurred at at the highest rate in 2020 compared to other years, the other most occurring crimes (in terms of fraction compared to total crimes in the year) seem to happen at a fairly similar rate. Those crimes include:</p>
+<p>Interestingly (or not), other than <strong>Identity Theft</strong> which occurred at at the highest rate in 2020 compared to all previous years, the other most occurring crimes (in terms of fraction compared to total crimes in the year) seem to happen at a fairly similar rate. Those crimes include:</p>
 <ul>
 <li>Theft from Motor Vehicle</li>
 <li>Simple Assault</li>
@@ -23,5 +24,15 @@ comments: true
 <li>All Other Larceny</li>
 <li>Aggravated Assault</li>
 </ul>
-<p>Let’s now take a closer look at crimes in 2020, the year with the highest crime occurrences.</p>
+<p>Let’s then examine those crimes in the year 2020, which remember, was the year with the highest crime occurrences.
+First, do the crimes differ in terms of hour of the day?</p>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>Compared to the overall crime occurrence trend line (in gray), a few observations stand out:</p>
+<ul>
+<li><em>Identity theft</em> is very high during working hours and remains after 16:00.
+<ul>
+<li>It could be that only during wake hours people realized that they experienced identity theft.</li>
+<li>It could be that this kind of crime do not require immediate attention and could be deferred for reporting during working hours.</li>
+</ul></li>
+<li><em>Simple Assault</em></li>
+</ul>
