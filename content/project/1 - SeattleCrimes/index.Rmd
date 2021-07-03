@@ -114,8 +114,8 @@ ggplot(data = hour.2020.offense, mapping=aes(x=Report.Hour, y=percent)) +
 
 Compared to the overall crime occurrence trend line (in gray), a few observations stand out:
 
-- Identity theft is very high during working hours and remains after 16:00.
+- *Identity theft* is very high during working hours and remains after 16:00.
   + It could be that only during wake hours people realized that they experienced identity theft.
   + It could be that this kind of crime do not require immediate attention and could be deferred for reporting during working hours.
   
-- 
+- *Simple Assault*
