@@ -1,7 +1,9 @@
 ---
 title: "Project 1 - Seattle Crime"
 date: '2021-07-01T21:42:38-07:00'
-tags: Analytics
+tags:
+- Analytics
+- Storytelling
 comments: yes
 ---
 
@@ -15,8 +17,6 @@ This notebook is an in-depth analysis of Seattle Crimes using:
 - Seattle Police Department (SPD) Crimes Data downloaded from <a href="https://data.seattle.gov/Public-Safety/SPD-Crime-Data-2008-Present/tazs-3rd5">Seattle Open Data</a> on June 30th 2021.
 - Population estimate for Seattle City from the US Census Bureau for <a href="https://www.census.gov/data/datasets/time-series/demo/popest/intercensal-2000-2010-cities-and-towns.html">2000-2010</a> and <a href="https://www.census.gov/data/datasets/time-series/demo/popest/2010s-total-cities-and-towns.html">2010-2019</a> downloaded on June 30th 2021.
 + Population estimates for 2020 were copied from 2019 as no new data is available yet.</p>
-<pre><code>## New names:
-## * `` -&gt; ...1</code></pre>
 <p>If we examine the occurrence of crimes each year (2008-2020, 2021 removed due to partial data) as a fraction of total crimes, we get the following plot:</p>
 <p>Above plot shows that crime rates in Seattle decreased in the year <em>2011-2012</em>, then steadily increases starting in 2013, with the highest rate in <em>2020</em>. That could be interesting. Let’s compare these two years in terms of type of Offenses to see if we can detect any differences.</p>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-1.png" width="672" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>

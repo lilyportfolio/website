@@ -1,7 +1,9 @@
 ---
 title: "Project 1 - Seattle Crime"
 date: '2021-07-01T21:42:38-07:00'
-tags: Analytics
+tags:
+- Analytics
+- Storytelling
 comments: yes
 ---
 
@@ -28,7 +30,7 @@ library(readxl)
 library(reshape2)
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 # load csv file.
 crimes = read.csv(file = "SEACrimes_2008_Present.csv")
 census00.10 = read.csv(file = "pop2000-2010.csv")
