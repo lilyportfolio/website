@@ -1,10 +1,13 @@
 ---
 title: "Project 1 - Seattle Crime"
 date: 2021-07-01T21:42:38-07:00
-publishdate: 2021-07-01T21:42:38-07:00
 tags: [Analytics]
 comments: true
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
 
 This notebook is an in-depth analysis of Seattle Police Department (SPD) Crimes Data downloaded from [Seattle Open Data](https://data.seattle.gov/Public-Safety/SPD-Crime-Data-2008-Present/tazs-3rd5) on June 30th 2021. 
 
