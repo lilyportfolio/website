@@ -8,6 +8,8 @@ comments: yes
 ---
 
 <script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+<script src="{{< blogdown/postref >}}index_files/kePrint/kePrint.js"></script>
+<link href="{{< blogdown/postref >}}index_files/lightable/lightable.css" rel="stylesheet" />
 
 
 <div id="context" class="section level2">
@@ -23,8 +25,6 @@ comments: yes
 <li>Population estimates for 2020 were copied from 2019 as no new data is available yet.</li>
 </ul></li>
 </ul>
-<pre><code>## Warning: Expected 2 pieces. Additional pieces discarded in 909965 rows [1, 2, 3,
-## 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...].</code></pre>
 <div id="crime-rate-per-year" class="section level4">
 <h4>Crime rate per year:</h4>
 <p>If we examine the occurrence of crimes each year (2008-2020, 2021 removed due to partial data) as a fraction of total crimes, we get the following:</p>
@@ -39,10 +39,8 @@ comments: yes
 <div id="offense-types" class="section level5">
 <h5>Offense Types:</h5>
 <ul>
-<li><p><strong>Identity Theft</strong> is drastically high in 2020. Could the pandemic be a fertile ground for such activities given the new shift of work from home, unemployment benefits and online shopping? Coincidentally, this finding correlates with multiple reports which presents similar phenomenon in other communities throughout the country, such as <a href="https://www.aarp.org/money/scams-fraud/info-2021/ftc-fraud-report-identity-theft-pandemic.html">Florida</a> or <a href="https://sacramento.cbslocal.com/2020/09/15/edd-putting-people-risk-identity-theft/">California</a>.</p>
-<ul>
-<li>It should also be noted that the Seattle identity theft rate of <strong>1273/100,000</strong> is almost double than the Washington state rate of <a href="https://www.iii.org/fact-statistic/facts-statistics-identity-theft-and-cybercrime"><strong>712/100,000</strong></a>!</li>
-</ul></li>
+<li><p><strong>Identity Theft</strong> is drastically high in 2020. Could the pandemic be a fertile ground for such activities given the new shift of work from home, unemployment benefits and online shopping? Coincidentally, this finding correlates with multiple reports which presents similar phenomenon in other communities throughout the country, such as <a href="https://www.aarp.org/money/scams-fraud/info-2021/ftc-fraud-report-identity-theft-pandemic.html">Florida</a> or <a href="https://sacramento.cbslocal.com/2020/09/15/edd-putting-people-risk-identity-theft/">California</a>.</p></li>
+<li><p>It should also be noted that the Seattle identity theft rate of <strong>1273/100,000</strong> is almost double than the Washington state rate of <a href="https://www.iii.org/fact-statistic/facts-statistics-identity-theft-and-cybercrime"><strong>712/100,000</strong></a>!</p></li>
 <li><p><strong>Theft from Motor Vehicle</strong> decreased from 2019. One could guess that remote working and unemployment resulted in less vehicles parked in the streets during work hours.</p></li>
 <li><p><strong>Trespass of Real Property</strong> also decreased from 2019, which could be from the same reasons as above.</p></li>
 <li><p><strong>Shoplifting</strong> also shows a decline in 2020. One can speculate that the closure of stores during the lockdown made it difficult for this type of crime to occur.</p></li>
@@ -51,9 +49,14 @@ comments: yes
 </div>
 <div id="where-is-the-crime" class="section level5">
 <h5>Where is the crime?</h5>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-8-1.png" width="672" />
-There is a drastic decrease in crimes in the Downtown Commercial neighborhood in 2020, and a noticeable increase in Sandpoint and Queen Anne neighborhoods.
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>There is a drastic decrease in crimes in the Downtown Commercial neighborhood in 2020, and a noticeable increase in Sandpoint and Queen Anne neighborhoods.
 Could this be attributed to increase police presence in Downtown? OR the opposite, the decrease of police presence in Sandpoint and Queen Anne?</p>
+</div>
+<div id="downtown-crimes-by-hour" class="section level5">
+<h5>Downtown Crimes by Hour</h5>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Above QQ plot of hourly crimes between 2019 and 2020 in MCPP Downtown show that the trend is quite different for both years. Crimes tend to happen later in terms of hours in 2019 compared to 2020. The trend tends to become similar for the late afternoon and night hours.</p>
 </div>
 </div>
 <div id="section" class="section level4">
@@ -61,46 +64,96 @@ Could this be attributed to increase police presence in Downtown? OR the opposit
 <div id="top-crime-locations" class="section level5">
 <h5>Top Crime locations</h5>
 <p>Remember from the last part where we hypothesized that burglary and breaking crimes increased in commercial addresses in 2020? However, at the same time, total crimes decreased in the Downtown neighborhood which seems contradictory. Let’s verify what is going on!</p>
-<table>
-<caption><span id="tab:unnamed-chunk-9">Table 1: </span>Top 5 Address with the highest number of Burglary/Breaking.</caption>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-10">Table 1: </span>Top 5 coordinates-addresses with the most Burglary/Breaking crimes in 2020
+</caption>
 <thead>
-<tr class="header">
-<th align="right">Longitude</th>
-<th align="right">Latitude</th>
-<th align="right">Total Count</th>
-<th align="left">Street Address</th>
+<tr>
+<th style="text-align:right;">
+Longitude
+</th>
+<th style="text-align:right;">
+Latitude
+</th>
+<th style="text-align:right;">
+Crime Count
+</th>
+<th style="text-align:left;">
+Address
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="right">-122.3311</td>
-<td align="right">47.62197</td>
-<td align="right">50</td>
-<td align="left">1255 Harrison Street</td>
+<tr>
+<td style="text-align:right;">
+-122.3311
+</td>
+<td style="text-align:right;">
+47.62197
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:left;">
+1255 Harrison Street
+</td>
 </tr>
-<tr class="even">
-<td align="right">-122.3384</td>
-<td align="right">47.60879</td>
-<td align="right">42</td>
-<td align="left">1410 2nd Avenue</td>
+<tr>
+<td style="text-align:right;">
+-122.3384
+</td>
+<td style="text-align:right;">
+47.60879
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:left;">
+1410 2nd Avenue
+</td>
 </tr>
-<tr class="odd">
-<td align="right">-122.3219</td>
-<td align="right">47.70859</td>
-<td align="right">40</td>
-<td align="left">539 Northeast Northgate Way</td>
+<tr>
+<td style="text-align:right;">
+-122.3219
+</td>
+<td style="text-align:right;">
+47.70859
+</td>
+<td style="text-align:right;">
+40
+</td>
+<td style="text-align:left;">
+539 Northeast Northgate Way
+</td>
 </tr>
-<tr class="even">
-<td align="right">-122.3187</td>
-<td align="right">47.67730</td>
-<td align="right">35</td>
-<td align="left">833 Northeast 67th Street</td>
+<tr>
+<td style="text-align:right;">
+-122.3187
+</td>
+<td style="text-align:right;">
+47.67730
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:left;">
+833 Northeast 67th Street
+</td>
 </tr>
-<tr class="odd">
-<td align="right">-122.3209</td>
-<td align="right">47.62370</td>
-<td align="right">30</td>
-<td align="left">528 Broadway East</td>
+<tr>
+<td style="text-align:right;">
+-122.3209
+</td>
+<td style="text-align:right;">
+47.62370
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:left;">
+528 Broadway East
+</td>
 </tr>
 </tbody>
 </table>
@@ -111,22 +164,39 @@ Could this be attributed to increase police presence in Downtown? OR the opposit
 <li><strong>833 Northeast 67th Street</strong>: empty lot in construction.</li>
 <li><strong>528 Broadway East</strong> : 527 is a restaurant, surrounding buildings are all commercial on the ground floor.</li>
 </ul>
-<p><em>One should keep in mind that the addresses generated are an approximation based on the Latitude and Longitude coordinates</em>. However, it gives a pretty clear picture of where burglary tend to occur. Our hypothesis seem to be holding, commercial properties are most likely the target for burglary and breaking crimes.</p>
+<p>Although <em>one should keep in mind that the addresses generated are an approximation based on the Latitude and Longitude coordinates</em>, above table gives a pretty clear picture of where burglary tend to occur. Our hypothesis seem to be holding, commercial properties are most likely the target for burglary and breaking crimes.</p>
 </div>
 <div id="prime-crime-hours" class="section level5">
 <h5>Prime Crime hours</h5>
-<p>Do different crimes have different occurence patterns throughout the day?</p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>Do different crimes have different occurrence patterns throughout the day?</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-11-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>Compared to the overall crime occurrence trend line (in gray), a few observations stand out:</p>
 <ul>
-<li><em>Identity theft</em> is very high during working hours and remains after 16:00.
+<li><p><strong>Midnight</strong> is when the most crimes occur.</p></li>
+<li><p><strong>Noon</strong> is when many crimes see a small peak.</p></li>
+<li><p><em>Identity theft</em> experiences a huge peak around midnight and is high in the morning.</p>
 <ul>
-<li>It could be that only during wake hours people realized that they experienced identity theft.</li>
-<li>It could be that this kind of crime do not require immediate attention and could be deferred for reporting during working hours.</li>
+<li>If we think about the mechanism of this crime, the exact moment the crime occurs may be unknown and when people reported it, an arbitrary time may have be chosen, which may explain the peak around midnight.</li>
+<li>Morning hours may likely be when people realize and report that they experienced identity theft.</li>
 </ul></li>
-<li><em>Simple Assault</em></li>
+<li><p><em>Shoplifting</em> occurs mostly during daytime, which correlates with commercial opening hours.</p></li>
+<li><p><em>Theft-type</em> of crimes all experience a small increase in the evening, all with peak around midnight.</p>
+<ul>
+<li>Again, one may question if the crime occurred around midnight or due to the delayed discovery of the crime, an arbitrary time was chosen.</li>
+</ul></li>
 </ul>
 </div>
 </div>
+</div>
+<div id="conclusion" class="section level3">
+<h3>Conclusion</h3>
+<p>This was a brief overview of some interesting aspects of the Seattle Crime dataset. From above analysis, we can conclude that:</p>
+<ul>
+<li>Crime rate increased in 2020 from 2019.</li>
+<li>The pandemic may have played a role in the rise of Identity Theft while deterring Shoplifting and Theft from Motor Vehicle.</li>
+<li>Seattle experienced a decrease in crimes in the Downtown area, although burglary still commonly occur in commercial settings.</li>
+<li>Midnight seem to be the time of day with the highest crime occurrences, which may or may not be contributed to systemic data entering. Noon is also a peak time for crimes.</li>
+</ul>
+<p>** This project’s repository can be found on my <a href="https://github.com/lilyportfolio/website">github</a> **</p>
 </div>
 </div>

@@ -30,8 +30,9 @@ library(tidyr)
 library(ggplot2)
 library(readxl)
 library(reshape2)
-library(knitr)
+library(kableExtra)
 library(gridExtra)
+library(knitr)
 ```
 
 ```{r, echo=FALSE, message=FALSE}
@@ -49,12 +50,12 @@ crimes$Date = as.Date(crimes$DateTime)
 crimes = separate(crimes, Date, c("Year", "Month", "Day"), sep = "[-]")
 
 crimes$Time = format(crimes$DateTime, "%T")
-crimes = separate(crimes, Time, c("Hour", "Min"), sep = "[:]")
+crimes = separate(crimes, Time, c("Hour", "Min", "Sec"), sep = "[:]")
 ```
 
 
 ```{r, echo=FALSE}
-# Remove 2021 data, only taking complete year reports and removed crimes occured before 2008, due to very small numbers (post-dated reporting)
+# Remove 2021 data, only taking complete year reports and removed crimes occurred before 2008, due to very small numbers (post-dated reporting)
 crimes.pre2021 = filter(crimes, Year <=2020 & Year >=2008)
 
 crimes.pre2021.year = crimes.pre2021 %>% 
@@ -168,7 +169,8 @@ ggplot(year.19.20.subset, aes(fill=Year, y=crime.rate.ind, x=Offense)) +
 ##### Offense Types:
 
 * **Identity Theft** is drastically high in 2020. Could the pandemic be a fertile ground for such activities given the new shift of work from home, unemployment benefits and online shopping? Coincidentally, this finding correlates with multiple reports which presents similar phenomenon in other communities throughout the country, such as [Florida](https://www.aarp.org/money/scams-fraud/info-2021/ftc-fraud-report-identity-theft-pandemic.html) or [California](https://sacramento.cbslocal.com/2020/09/15/edd-putting-people-risk-identity-theft/).
-  + It should also be noted that the Seattle identity theft rate of **1273/100,000** is almost double than the Washington state rate of [**712/100,000**](https://www.iii.org/fact-statistic/facts-statistics-identity-theft-and-cybercrime)!
+
++ It should also be noted that the Seattle identity theft rate of **1273/100,000** is almost double than the Washington state rate of [**712/100,000**](https://www.iii.org/fact-statistic/facts-statistics-identity-theft-and-cybercrime)!
 
 * **Theft from Motor Vehicle** decreased from 2019. One could guess that remote working and unemployment resulted in less vehicles parked in the streets during work hours.
 
@@ -200,8 +202,18 @@ ggplot(MCPP.19.20.subset, aes(fill=Year, y=count, x=MCPP)) +
   labs(x = "MCPP neighborhoods", y = "Crime count", title = "Top 10 MCPP neighborhoods for crime occurrences in 2019 and 2020") + 
   theme(plot.title = element_text(hjust = 0.5), axis.text.x=element_text(angle=45,hjust=1))
 ```
+
 There is a drastic decrease in crimes in the Downtown Commercial neighborhood in 2020, and a noticeable increase in Sandpoint and Queen Anne neighborhoods.
 Could this be attributed to increase police presence in Downtown? OR the opposite, the decrease of police presence in Sandpoint and Queen Anne?
+
+##### Downtown Crimes by Hour
+
+```{r, echo=FALSE}
+with(subset(crimes, MCPP == "DOWNTOWN COMMERCIAL"), qqplot(x = Hour[ Year == '2020'], y = Hour[ Year == '2019'], main='QQ plot for Downtown Crimes'))
+abline(0,1)
+```
+
+Above QQ plot of hourly crimes between 2019 and 2020 in MCPP Downtown show that the trend is quite different for both years. Crimes tend to happen later in terms of hours in 2019 compared to 2020. The trend tends to become similar for the late afternoon and night hours.
 
 
 #### 2020
@@ -234,7 +246,9 @@ crimes.2020.burglary.top$address = c("1255 Harrison Street",
                                      "528 Broadway East")
 
 # Display data frame in a table.
-kable(crimes.2020.burglary.top, caption = "Top 5 Address with the highest number of Burglary/Breaking.", col.names = c("Longitude", "Latitude", "Total Count", "Street Address"))
+crimes.2020.burglary.top %>%
+  kable(caption = "Top 5 coordinates-addresses with the most Burglary/Breaking crimes in 2020", col.names = c("Longitude", "Latitude", "Crime Count", "Address")) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
 ```
 * **1255 Harrison Street**: is actually a newly built mixed-use housing and retail condo building.
 * **1410 2nd Avenue**: is a Target store in downtown area.
@@ -242,16 +256,16 @@ kable(crimes.2020.burglary.top, caption = "Top 5 Address with the highest number
 * **833 Northeast 67th Street**: empty lot in construction.
 * **528 Broadway East** : 527 is a restaurant, surrounding buildings are all commercial on the ground floor.
 
-*One should keep in mind that the addresses generated are an approximation based on the Latitude and Longitude coordinates*. However, it gives a pretty clear picture of where burglary tend to occur. Our hypothesis seem to be holding, commercial properties are most likely the target for burglary and breaking crimes.
+Although *one should keep in mind that the addresses generated are an approximation based on the Latitude and Longitude coordinates*, above table gives a pretty clear picture of where burglary tend to occur. Our hypothesis seem to be holding, commercial properties are most likely the target for burglary and breaking crimes.
 
 
 ##### Prime Crime hours
 
-Do different crimes have different occurence patterns throughout the day?
+Do different crimes have different occurrence patterns throughout the day?
 
 ```{r, fig.align="center", fig.height = 8, fig.width = 8, echo=FALSE, message=FALSE}
 
-# select only year 2019 and 2020
+# select only year 2020
 year.20 = filter(year.pre2021, Year ==2020)
 
 year.20.order = year.20[order(-year.20$count), ]
@@ -265,7 +279,7 @@ year.20.top = year.20[year.20$Offense %in% d,]
 
 year.20.merge = merge(crimes.2020, year.20.top, by = "Offense")
 
-hour.2020 = year.20.merge %>% 
+hour.2020 = crimes.2020 %>% 
   group_by(Hour) %>% 
   summarise(count=n()) %>% 
   mutate(percent = count/sum(count))
@@ -285,8 +299,28 @@ ggplot(data = hour.2020.offense, mapping=aes(x=Hour, y=percent)) +
 
 Compared to the overall crime occurrence trend line (in gray), a few observations stand out:
 
-- *Identity theft* is very high during working hours and remains after 16:00.
-  + It could be that only during wake hours people realized that they experienced identity theft.
-  + It could be that this kind of crime do not require immediate attention and could be deferred for reporting during working hours.
+- **Midnight** is when the most crimes occur.
+
+- **Noon** is when many crimes see a small peak.
+
+- *Identity theft* experiences a huge peak around midnight and is high in the morning.
+  + If we think about the mechanism of this crime, the exact moment the crime occurs may be unknown and when people reported it, an arbitrary time may have be chosen, which may explain the peak around midnight.
+  + Morning hours may likely be when people realize and report that they experienced identity theft.
   
-- *Simple Assault*
+- *Shoplifting* occurs mostly during daytime, which correlates with commercial opening hours.
+
+- *Theft-type* of crimes all experience a small increase in the evening, all with peak around midnight.
+  + Again, one may question if the crime occurred around midnight or due to the delayed discovery of the crime, an arbitrary time was chosen.
+
+
+### Conclusion
+
+This was a brief overview of some interesting aspects of the Seattle Crime dataset. From above analysis, we can conclude that:
+
+- Crime rate increased in 2020 from 2019.
+- The pandemic may have played a role in the rise of Identity Theft while deterring Shoplifting and Theft from Motor Vehicle.
+- Seattle experienced a decrease in crimes in the Downtown area, although burglary still commonly occur in commercial settings.
+- Midnight seem to be the time of day with the highest crime occurrences, which may or may not be contributed to systemic data entering. Noon is also a peak time for crimes.
+
+
+** This project's repository can be found on my [github](https://github.com/lilyportfolio/website) **

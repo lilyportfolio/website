@@ -11,12 +11,10 @@
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://lilyportfolio.netlify.app/project/1-seattlecrimes/cover.jpg"/>
 <meta name="twitter:title" content="Project 1 - Seattle Crime"/>
-<meta name="twitter:description" content="This notebook is an in-depth analysis of Seattle Police Department (SPD) Crimes Data downloaded from Seattle Open Data on June 30th 2021.
-Above plot shows that crime rates in Seattle decreased in the year 2011-2012, then steadily increases starting in 2013, with the highest rate in 2020."/>
+<meta name="twitter:description" content="ContextYear 2020 was full of surprises, especially in Seattle. The historical cancellation of the New Year’s fireworks seemed to be the premonition of the year to come."/>
 
 	<meta property="og:title" content="Project 1 - Seattle Crime" />
-<meta property="og:description" content="This notebook is an in-depth analysis of Seattle Police Department (SPD) Crimes Data downloaded from Seattle Open Data on June 30th 2021.
-Above plot shows that crime rates in Seattle decreased in the year 2011-2012, then steadily increases starting in 2013, with the highest rate in 2020." />
+<meta property="og:description" content="ContextYear 2020 was full of surprises, especially in Seattle. The historical cancellation of the New Year’s fireworks seemed to be the premonition of the year to come." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://lilyportfolio.netlify.app/project/1-seattlecrimes/" /><meta property="og:image" content="https://lilyportfolio.netlify.app/project/1-seattlecrimes/cover.jpg"/><meta property="article:section" content="project" />
 <meta property="article:published_time" content="2021-07-01T21:42:38-07:00" />
@@ -138,7 +136,7 @@ Above plot shows that crime rates in Seattle decreased in the year 2011-2012, th
                                     <i class="far fa-star"></i>
                                     Jul 1, 2021
                                     <i class="far fa-clock clock"></i>
-                                    1 min read
+                                    5 min read
                                 </span>					
                             </div>
                         </div>			
@@ -162,23 +160,126 @@ Above plot shows that crime rates in Seattle decreased in the year 2011-2012, th
 <script src="https://lilyportfolio.netlify.app/project/1-seattlecrimes/index_files/header-attrs/header-attrs.js"></script>
 
 
-<p>This notebook is an in-depth analysis of Seattle Police Department (SPD) Crimes Data downloaded from <a href="https://data.seattle.gov/Public-Safety/SPD-Crime-Data-2008-Present/tazs-3rd5">Seattle Open Data</a> on June 30th 2021.</p>
-<p><img src="https://lilyportfolio.netlify.app/project/1-seattlecrimes/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<p>Above plot shows that crime rates in Seattle decreased in the year 2011-2012, then steadily increases starting in 2013, with the highest rate in 2020. Let’s compare these two years in terms of type of Offenses.</p>
-<p><img src="https://lilyportfolio.netlify.app/project/1-seattlecrimes/index_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>Interestingly, other than <strong>Identity Theft</strong> which occurred at at the highest rate in 2020 compared to other years, the other most occurring crimes (in terms of fraction compared to total crimes in the year) seem to happen at a fairly similar rate. Those crimes include:</p>
+<div id="context" class="section level2">
+<h2>Context</h2>
+<p>Year 2020 was full of surprises, especially in Seattle. The historical cancellation of the New Year’s fireworks seemed to be the premonition of the year to come. Grasped with the pandemic and social unrest, headlines of frequent crimes along with the police defunding movement, it makes one question if crime is actually on the rise in Seattle. This became the inspiration for this project.</p>
+<div id="how-i-did-this" class="section level3">
+<h3>How I did this</h3>
+<p>This notebook is an in-depth analysis of Seattle Crimes using:
+- Seattle Police Department (SPD) Crimes Data downloaded from <a href="https://data.seattle.gov/Public-Safety/SPD-Crime-Data-2008-Present/tazs-3rd5">Seattle Open Data</a> on June 30th 2021.</p>
 <ul>
-<li>Theft from Motor Vehicle</li>
-<li>Simple Assault</li>
-<li>Shoplifting</li>
-<li>Motor Vehicle Theft</li>
-<li>Destruction/Damage/Vandalism of Property</li>
-<li>Burglary/Breaking &amp; Entering</li>
-<li>All Other Larceny</li>
-<li>Aggravated Assault</li>
+<li>Population estimate for Seattle City from the US Census Bureau for <a href="https://www.census.gov/data/datasets/time-series/demo/popest/intercensal-2000-2010-cities-and-towns.html">2000-2010</a> and <a href="https://www.census.gov/data/datasets/time-series/demo/popest/2010s-total-cities-and-towns.html">2010-2019</a> downloaded on June 30th 2021.
+<ul>
+<li>Population estimates for 2020 were copied from 2019 as no new data is available yet.</li>
+</ul></li>
 </ul>
-<p>Let’s now take a closer look at crimes in 2020, the year with the highest crime occurrences.</p>
-<p><img src="https://lilyportfolio.netlify.app/project/1-seattlecrimes/index_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre><code>## Warning: Expected 2 pieces. Additional pieces discarded in 909965 rows [1, 2, 3,
+## 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...].</code></pre>
+<div id="crime-rate-per-year" class="section level4">
+<h4>Crime rate per year:</h4>
+<p>If we examine the occurrence of crimes each year (2008-2020, 2021 removed due to partial data) as a fraction of total crimes, we get the following:</p>
+<p><img src="https://lilyportfolio.netlify.app/project/1-seattlecrimes/index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>A simple plot (<em>on the left</em>) of crime counts per year over total crimes of all years (2021 removed due to partial data) shows that crimes drastically decreased in the years of 2011-2012, then steadily increased with the highest counts in 2020. There is a small dip in that can be noted in 2019. Therefore, it seems at first glance that after 2012, crimes increased in Seattle.</p>
+<p>However, a more telling plot of crime rate per 100,000 population (<em>on the right</em>) can help us examine our assumptions further. In fact, we can see that crime rate is actually very high in 2008 and 2009, and steadily decreased to the lowest level in 2012. Surprisingly, the small dip observed on the previous plot in 2019 revealed a more significant decline in crime rate per population. Last thing to note is that there is a increase of crime in 2020 that can be observed in both plots.</p>
+<p>Thus, let’s examine the differences between year 2019 and 2020.</p>
+<p><img src="https://lilyportfolio.netlify.app/project/1-seattlecrimes/index_files/figure-html/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="vs-2020" class="section level4">
+<h4>2019 vs 2020</h4>
+<div id="offense-types" class="section level5">
+<h5>Offense Types:</h5>
+<ul>
+<li><p><strong>Identity Theft</strong> is drastically high in 2020. Could the pandemic be a fertile ground for such activities given the new shift of work from home, unemployment benefits and online shopping? Coincidentally, this finding correlates with multiple reports which presents similar phenomenon in other communities throughout the country, such as <a href="https://www.aarp.org/money/scams-fraud/info-2021/ftc-fraud-report-identity-theft-pandemic.html">Florida</a> or <a href="https://sacramento.cbslocal.com/2020/09/15/edd-putting-people-risk-identity-theft/">California</a>.</p>
+<ul>
+<li>It should also be noted that the Seattle identity theft rate of <strong>1273/100,000</strong> is almost double than the Washington state rate of <a href="https://www.iii.org/fact-statistic/facts-statistics-identity-theft-and-cybercrime"><strong>712/100,000</strong></a>!</li>
+</ul></li>
+<li><p><strong>Theft from Motor Vehicle</strong> decreased from 2019. One could guess that remote working and unemployment resulted in less vehicles parked in the streets during work hours.</p></li>
+<li><p><strong>Trespass of Real Property</strong> also decreased from 2019, which could be from the same reasons as above.</p></li>
+<li><p><strong>Shoplifting</strong> also shows a decline in 2020. One can speculate that the closure of stores during the lockdown made it difficult for this type of crime to occur.</p></li>
+<li><p><strong>Burglary/Breaking &amp; Entering</strong> increased in 2020. At first it may be counter-intuitive as one assumes people are at home all the time. It leads to the following question, are the location residences or commercial? Maybe commercial properties that are vacated during the pandemic became a prime target?</p></li>
+</ul>
+</div>
+<div id="where-is-the-crime" class="section level5">
+<h5>Where is the crime?</h5>
+<p><img src="https://lilyportfolio.netlify.app/project/1-seattlecrimes/index_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+There is a drastic decrease in crimes in the Downtown Commercial neighborhood in 2020, and a noticeable increase in Sandpoint and Queen Anne neighborhoods.
+Could this be attributed to increase police presence in Downtown? OR the opposite, the decrease of police presence in Sandpoint and Queen Anne?</p>
+</div>
+</div>
+<div id="section" class="section level4">
+<h4>2020</h4>
+<div id="top-crime-locations" class="section level5">
+<h5>Top Crime locations</h5>
+<p>Remember from the last part where we hypothesized that burglary and breaking crimes increased in commercial addresses in 2020? However, at the same time, total crimes decreased in the Downtown neighborhood which seems contradictory. Let’s verify what is going on!</p>
+<table>
+<caption><span id="tab:unnamed-chunk-9">Table 1: </span>Top 5 Address with the highest number of Burglary/Breaking.</caption>
+<thead>
+<tr class="header">
+<th align="right">Longitude</th>
+<th align="right">Latitude</th>
+<th align="right">Total Count</th>
+<th align="left">Street Address</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">-122.3311</td>
+<td align="right">47.62197</td>
+<td align="right">50</td>
+<td align="left">1255 Harrison Street</td>
+</tr>
+<tr class="even">
+<td align="right">-122.3384</td>
+<td align="right">47.60879</td>
+<td align="right">42</td>
+<td align="left">1410 2nd Avenue</td>
+</tr>
+<tr class="odd">
+<td align="right">-122.3219</td>
+<td align="right">47.70859</td>
+<td align="right">40</td>
+<td align="left">539 Northeast Northgate Way</td>
+</tr>
+<tr class="even">
+<td align="right">-122.3187</td>
+<td align="right">47.67730</td>
+<td align="right">35</td>
+<td align="left">833 Northeast 67th Street</td>
+</tr>
+<tr class="odd">
+<td align="right">-122.3209</td>
+<td align="right">47.62370</td>
+<td align="right">30</td>
+<td align="left">528 Broadway East</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>1255 Harrison Street</strong>: is actually a newly built mixed-use housing and retail condo building.</li>
+<li><strong>1410 2nd Avenue</strong>: is a Target store in downtown area.</li>
+<li><strong>539 Northeast Northgate Way</strong>: does not generate an existing address but the closest address, 540, is a Starbucks. Surrounding buildings are all commercial on the ground floor.</li>
+<li><strong>833 Northeast 67th Street</strong>: empty lot in construction.</li>
+<li><strong>528 Broadway East</strong> : 527 is a restaurant, surrounding buildings are all commercial on the ground floor.</li>
+</ul>
+<p><em>One should keep in mind that the addresses generated are an approximation based on the Latitude and Longitude coordinates</em>. However, it gives a pretty clear picture of where burglary tend to occur. Our hypothesis seem to be holding, commercial properties are most likely the target for burglary and breaking crimes.</p>
+</div>
+<div id="prime-crime-hours" class="section level5">
+<h5>Prime Crime hours</h5>
+<p>Do different crimes have different occurence patterns throughout the day?</p>
+<p><img src="https://lilyportfolio.netlify.app/project/1-seattlecrimes/index_files/figure-html/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>Compared to the overall crime occurrence trend line (in gray), a few observations stand out:</p>
+<ul>
+<li><em>Identity theft</em> is very high during working hours and remains after 16:00.
+<ul>
+<li>It could be that only during wake hours people realized that they experienced identity theft.</li>
+<li>It could be that this kind of crime do not require immediate attention and could be deferred for reporting during working hours.</li>
+</ul></li>
+<li><em>Simple Assault</em></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
 
                     </div>
                     
@@ -188,6 +289,10 @@ Above plot shows that crime rates in Seattle decreased in the year 2011-2012, th
                         
                         <li>
                         <a href="https://lilyportfolio.netlify.app/tags/analytics">Analytics</a>
+                        </li>
+                        
+                        <li>
+                        <a href="https://lilyportfolio.netlify.app/tags/storytelling">Storytelling</a>
                         </li>
                         
                         </ul>
@@ -229,6 +334,8 @@ Above plot shows that crime rates in Seattle decreased in the year 2011-2012, th
 		<div class="col-md-8 p-5 align-self-center text-center">
 			
 			<a class="mt-1 mb-1" href="https://lilyportfolio.netlify.app/tags/analytics">analytics</a>
+			
+			<a class="mt-1 mb-1" href="https://lilyportfolio.netlify.app/tags/storytelling">storytelling</a>
 			
 		</div>
 	</div>

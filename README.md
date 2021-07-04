@@ -1,5 +1,5 @@
-# Demo
+# Lily's portfolio
 
-This is the demonstration site of the [Mediumish GoHugo Theme](https://github.com/lgaida/mediumish-gohugo-theme)
-Run `hugo server -w -v`
-
+This repository contains all my projects' coding.
+A website with all my projects as well as my contact information can be found at:
+https://lilyportfolio.netlify.app
