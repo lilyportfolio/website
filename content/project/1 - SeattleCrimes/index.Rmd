@@ -42,23 +42,23 @@ census10.19 = read_excel("F:\\Lily\\Documents\\Portfolio\\website\\content\\proj
 names(census10.19)[names(census10.19) == "...1"] = "City.Name"
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 # Format date and time for later data extraction.
-crimes$Report.DateTime = as.POSIXct(as.character(crimes$Report.DateTime), format =  "%m/%d/%Y %H:%M")
-crimes$Report.Date = as.Date(crimes$Report.DateTime)
-crimes = separate(crimes, Report.Date, c("Report.Year", "Report.Month", "Report.Day"), sep = "[-]")
+crimes$DateTime = as.POSIXct(as.character(crimes$Offense.Start.DateTime), format =  "%m/%d/%Y %H:%M")
+crimes$Date = as.Date(crimes$DateTime)
+crimes = separate(crimes, Date, c("Year", "Month", "Day"), sep = "[-]")
 
-crimes$Report.Time = format(crimes$Report.DateTime, "%T")
-crimes = separate(crimes, Report.Time, c("Report.Hour", "Report.Min", "Report.Sec"), sep = "[:]")
+crimes$Time = format(crimes$DateTime, "%T")
+crimes = separate(crimes, Time, c("Hour", "Min"), sep = "[:]")
 ```
 
 
 ```{r, echo=FALSE}
-# Remove 2021 data, only taking complete year reports
-crimes.pre2021 = filter(crimes, Report.Year <=2020)
+# Remove 2021 data, only taking complete year reports and removed crimes occured before 2008, due to very small numbers (post-dated reporting)
+crimes.pre2021 = filter(crimes, Year <=2020 & Year >=2008)
 
 crimes.pre2021.year = crimes.pre2021 %>% 
-  group_by(Report.Year) %>% 
+  group_by(Year) %>% 
   summarise(count=n()) %>% 
   mutate(percent = count/sum(count))
 ```
@@ -109,14 +109,14 @@ crimes.pre2021.year = mutate(crimes.pre2021.year,
                              crime.rate = (count/population)*100000)
 
 # plot of fraction of crime per year
-plot.fraction = ggplot(data = crimes.pre2021.year, mapping=aes(x=Report.Year, y=percent)) + 
+plot.fraction = ggplot(data = crimes.pre2021.year, mapping=aes(x=Year, y=percent)) + 
   geom_point() +
   geom_line(group = 1) +
   labs(x = "Year", y = "Fraction of crimes committed", title = "Percentage of crimes committed each year") +
   plot.theme1
 
 # plot of crime per pop per year
-plot.rate = ggplot(data = crimes.pre2021.year, mapping=aes(x=Report.Year, y=crime.rate)) + 
+plot.rate = ggplot(data = crimes.pre2021.year, mapping=aes(x=Year, y=crime.rate)) + 
   geom_point() +
   geom_line(group = 1) +
   labs(x = "Year", y = "Crime rate per 100,000 pop", title = "Crime rate per 100,000 population per year") +
@@ -135,14 +135,14 @@ Thus, let's examine the differences between year 2019 and 2020.
 ```{r, fig.align="center", fig.height = 6, fig.width = 8, echo=FALSE, message=FALSE}
 
 year.pre2021 = crimes.pre2021 %>% 
-  group_by(Offense, Report.Year) %>% 
+  group_by(Offense, Year) %>% 
   summarise(count=n())
 
 # select only year 2019 and 2020
-year.19.20 = filter(year.pre2021, Report.Year ==2020 | Report.Year ==2019)
+year.19.20 = filter(year.pre2021, Year ==2020 | Year ==2019)
 
 # find out top 5 crimes for both years
-year.19.20.merge = merge(year.19.20, crimes.pre2021.year, by = "Report.Year", all.x = T)
+year.19.20.merge = merge(year.19.20, crimes.pre2021.year, by = "Year", all.x = T)
 
 year.19.20.merge = mutate(year.19.20.merge,
                           crime.rate.ind = (count.x/population)*100000)
@@ -156,7 +156,7 @@ y = x[1:10]
 #subset top 10 offenses for 2019 and 2020
 year.19.20.subset = year.19.20.merge[year.19.20.merge$Offense %in% y,]
 
-ggplot(year.19.20.subset, aes(fill=Report.Year, y=crime.rate.ind, x=Offense)) +
+ggplot(year.19.20.subset, aes(fill=Year, y=crime.rate.ind, x=Offense)) +
   geom_bar(position="dodge", stat="identity") +
   labs(x = "Type of Offense", y = "Crime rate per 100,000 population", title = "Crime rate of top 10 Offenses in 2019 and 2020") + 
   theme(plot.title = element_text(hjust = 0.5), axis.text.x=element_text(angle=45,hjust=1))
@@ -168,60 +168,116 @@ ggplot(year.19.20.subset, aes(fill=Report.Year, y=crime.rate.ind, x=Offense)) +
 ##### Offense Types:
 
 * **Identity Theft** is drastically high in 2020. Could the pandemic be a fertile ground for such activities given the new shift of work from home, unemployment benefits and online shopping? Coincidentally, this finding correlates with multiple reports which presents similar phenomenon in other communities throughout the country, such as [Florida](https://www.aarp.org/money/scams-fraud/info-2021/ftc-fraud-report-identity-theft-pandemic.html) or [California](https://sacramento.cbslocal.com/2020/09/15/edd-putting-people-risk-identity-theft/).
-+ It should also be noted that the Seattle identity theft rate of **1273/100,000** is almost double than the Washington state rate of [**712/100,000**](https://www.iii.org/fact-statistic/facts-statistics-identity-theft-and-cybercrime)!
+  + It should also be noted that the Seattle identity theft rate of **1273/100,000** is almost double than the Washington state rate of [**712/100,000**](https://www.iii.org/fact-statistic/facts-statistics-identity-theft-and-cybercrime)!
 
 * **Theft from Motor Vehicle** decreased from 2019. One could guess that remote working and unemployment resulted in less vehicles parked in the streets during work hours.
 
+* **Trespass of Real Property** also decreased from 2019, which could be from the same reasons as above. 
+
+* **Shoplifting** also shows a decline in 2020. One can speculate that the closure of stores during the lockdown made it difficult for this type of crime to occur.
+
 * **Burglary/Breaking & Entering** increased in 2020. At first it may be counter-intuitive as one assumes people are at home all the time. It leads to the following question, are the location residences or commercial? Maybe commercial properties that are vacated during the pandemic became a prime target?
 
-Let's check this hypothesis before we move on.
+##### Where is the crime?
 
 ```{r, echo=F, message = FALSE}
-crimes.2020 = filter(crimes, Report.Year == 2020)
-
-# filter offense to only burglary and remove address where the value is empty
-crimes.2020.burglary = filter(crimes.2020, Offense == "Burglary/Breaking & Entering", X100.Block.Address != "")
-
-crimes.2020.burglary.address = crimes.2020.burglary %>% 
-  group_by(X100.Block.Address) %>% 
+MCPP.19.20 = crimes %>% 
+  filter(Year ==2020 | Year ==2019) %>% 
+  group_by(MCPP, Year) %>% 
   summarise(count=n())
 
-crimes.2020.burglary.address = crimes.2020.burglary.address[order(-crimes.2020.burglary.address$count),]
+MCPP.19.20.order = MCPP.19.20[order(-MCPP.19.20$count, MCPP.19.20$MCPP),]
+
+# Compute top 10 type of offenses and store in a vector
+a = unique(MCPP.19.20.order$MCPP)
+b = a[1:10]
+
+#subset top 10 offenses for 2019 and 2020
+MCPP.19.20.subset = MCPP.19.20[MCPP.19.20$MCPP %in% b, ]
+
+ggplot(MCPP.19.20.subset, aes(fill=Year, y=count, x=MCPP)) +
+  geom_bar(position="dodge", stat="identity") +
+  labs(x = "MCPP neighborhoods", y = "Crime count", title = "Top 10 MCPP neighborhoods for crime occurrences in 2019 and 2020") + 
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x=element_text(angle=45,hjust=1))
+```
+There is a drastic decrease in crimes in the Downtown Commercial neighborhood in 2020, and a noticeable increase in Sandpoint and Queen Anne neighborhoods.
+Could this be attributed to increase police presence in Downtown? OR the opposite, the decrease of police presence in Sandpoint and Queen Anne?
+
+
+#### 2020
+
+##### Top Crime locations
+
+Remember from the last part where we hypothesized that burglary and breaking crimes increased in commercial addresses in 2020? However, at the same time, total crimes decreased in the Downtown neighborhood which seems contradictory. Let's verify what is going on!
+
+```{r, echo=F, message = FALSE}
+crimes.2020 = filter(crimes, Year == 2020)
+
+# filter offense to only burglary and remove address where the value is empty
+crimes.2020.burglary = filter(crimes.2020, Offense == "Burglary/Breaking & Entering", Longitude != 0, Latitude != 0)
+
+crimes.2020.burglary.coord = crimes.2020.burglary %>% 
+  group_by(Longitude, Latitude) %>% 
+  summarise(count=n())
+
+crimes.2020.burglary.coord = crimes.2020.burglary.coord[order(-crimes.2020.burglary.coord$count),]
 
 # take the top 5 addresses
-crimes.2020.burglary.address.top = head(crimes.2020.burglary.address, 5)
-rownames(crimes.2020.burglary.address.top) = c()
+crimes.2020.burglary.top = head(crimes.2020.burglary.coord, 5)
+rownames(crimes.2020.burglary.top) = c()
+
+# add manually addresses from Google search coordinates
+crimes.2020.burglary.top$address = c("1255 Harrison Street",
+                                     "1410 2nd Avenue",
+                                     "539 Northeast Northgate Way",
+                                     "833 Northeast 67th Street",
+                                     "528 Broadway East")
 
 # Display data frame in a table.
-kable(crimes.2020.burglary.address.top, caption = "Top 5 X100 Block Address the highest number of Burglary/Breaking.", col.names = c("Block Address", "Total Count"))
+kable(crimes.2020.burglary.top, caption = "Top 5 Address with the highest number of Burglary/Breaking.", col.names = c("Longitude", "Latitude", "Total Count", "Street Address"))
 ```
-* 12XX BLOCK OF HARRISON ST: in a residential area with many apartment buildings. Many of the ground floors of those buildings are for commercial use (restaurants, entertainments...)
-* 14XX BLOCK OF 2ND AVE: a few condo buildings and facing a high school.
-* 5XX BLOCK OF NE NORTHGATE WAY: in the center of a commercial district with many storefronts.
-* 8XX BLOCK OF NE 67TH ST: a few apartment buildings with an empty lot in construction.
-* 5XX BLOCK OF BROADWAY E: busy commercial district with many storefronts.
+* **1255 Harrison Street**: is actually a newly built mixed-use housing and retail condo building.
+* **1410 2nd Avenue**: is a Target store in downtown area.
+* **539 Northeast Northgate Way**: does not generate an existing address but the closest address, 540, is a Starbucks. Surrounding buildings are all commercial on the ground floor.
+* **833 Northeast 67th Street**: empty lot in construction.
+* **528 Broadway East** : 527 is a restaurant, surrounding buildings are all commercial on the ground floor.
 
-From above observations, we cannot fully support our hypothesis. Although some addresses block are clearly commercial, others are more difficult to distinguish. We can only say that part of the breaking activities are targeted towards commercial establishments. However, it does not mean that it is not the same trend in the other years.
+*One should keep in mind that the addresses generated are an approximation based on the Latitude and Longitude coordinates*. However, it gives a pretty clear picture of where burglary tend to occur. Our hypothesis seem to be holding, commercial properties are most likely the target for burglary and breaking crimes.
 
 
-Let's then examine those crimes in the year 2020, which remember, was the year with the highest crime occurrences.
-First, do the crimes differ in terms of hour of the day?
+##### Prime Crime hours
+
+Do different crimes have different occurence patterns throughout the day?
 
 ```{r, fig.align="center", fig.height = 8, fig.width = 8, echo=FALSE, message=FALSE}
 
-hour.2020 = crimes.2020 %>% 
-  group_by(Report.Hour) %>% 
+# select only year 2019 and 2020
+year.20 = filter(year.pre2021, Year ==2020)
+
+year.20.order = year.20[order(-year.20$count), ]
+
+# Compute top 10 type of offenses and store in a vector
+c = unique(year.20.order$Offense)
+d = c[1:10]
+
+#subset top 10 offenses for 2019 and 2020
+year.20.top = year.20[year.20$Offense %in% d,]
+
+year.20.merge = merge(crimes.2020, year.20.top, by = "Offense")
+
+hour.2020 = year.20.merge %>% 
+  group_by(Hour) %>% 
   summarise(count=n()) %>% 
   mutate(percent = count/sum(count))
 
-hour.2020.offense = crimes.2020 %>% 
-  group_by(Offense, Report.Hour) %>% 
+hour.2020.offense = year.20.merge %>% 
+  group_by(Offense, Hour) %>% 
   summarise(count=n()) %>% 
   mutate(percent = count/sum(count))
 
-ggplot(data = hour.2020.offense, mapping=aes(x=Report.Hour, y=percent)) + 
+ggplot(data = hour.2020.offense, mapping=aes(x=Hour, y=percent)) + 
   geom_point(size=0.5) + geom_line(color = "blue", group =1) + facet_wrap("Offense", ncol = 2) + 
-  geom_line(data = hour.2020, mapping=aes(x=Report.Hour, y=percent), color = "grey", group=1) +
+  geom_line(data = hour.2020, mapping=aes(x=Hour, y=percent), color = "grey", group=1) +
   labs(x = "Hour", y = "Fraction of crimes committed", title = "Percentage of crimes committed each hour by offense type") + 
   theme(plot.title = element_text(hjust = 0.5)) + 
    scale_x_discrete(breaks = c("00", "04", "08", "12", "16", "20", "24"), labels = c("0", "4", "8", "12", "16", "20", "24"))
