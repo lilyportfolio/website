@@ -11,13 +11,15 @@ comments: yes
 knitr::opts_chunk$set(collapse = TRUE)
 ```
 
-**Context**
+## Context
 
 Year 2020 was full of surprises, especially in Seattle. The historical cancellation of the New Year's fireworks seemed to be the premonition of the year to come. Grasped with the pandemic and social unrest, headlines of frequent crimes along with the police defunding movement, it makes one question if crime is actually on the rise in Seattle. This became the inspiration for this project.
 
-*How I did this*
+### How I did this
+
 This notebook is an in-depth analysis of Seattle Crimes using:
 - Seattle Police Department (SPD) Crimes Data downloaded from [Seattle Open Data](https://data.seattle.gov/Public-Safety/SPD-Crime-Data-2008-Present/tazs-3rd5) on June 30th 2021. 
+
 - Population estimate for Seattle City from the US Census Bureau for [2000-2010](https://www.census.gov/data/datasets/time-series/demo/popest/intercensal-2000-2010-cities-and-towns.html) and [2010-2019](https://www.census.gov/data/datasets/time-series/demo/popest/2010s-total-cities-and-towns.html) downloaded on June 30th 2021.
   + Population estimates for 2020 were copied from 2019 as no new data is available yet.
 
@@ -28,6 +30,8 @@ library(tidyr)
 library(ggplot2)
 library(readxl)
 library(reshape2)
+library(knitr)
+library(gridExtra)
 ```
 
 ```{r, echo=FALSE, message=FALSE}
@@ -48,7 +52,6 @@ crimes$Report.Time = format(crimes$Report.DateTime, "%T")
 crimes = separate(crimes, Report.Time, c("Report.Hour", "Report.Min", "Report.Sec"), sep = "[:]")
 ```
 
-If we examine the occurrence of crimes each year (2008-2020, 2021 removed due to partial data) as a fraction of total crimes, we get the following plot:
 
 ```{r, echo=FALSE}
 # Remove 2021 data, only taking complete year reports
@@ -58,15 +61,22 @@ crimes.pre2021.year = crimes.pre2021 %>%
   group_by(Report.Year) %>% 
   summarise(count=n()) %>% 
   mutate(percent = count/sum(count))
-
-plot.percent = ggplot(data = crimes.pre2021.year, mapping=aes(x=Report.Year, y=percent)) + 
-  geom_point() +
-  geom_line(group = 1) +
-  labs(x = "Year", y = "Fraction of crimes committed", title = "Percentage of crimes committed each year") +
-  theme(plot.title = element_text(hjust = 0.5))
 ```
 
-Above plot shows that crime rates in Seattle decreased in the year *2011-2012*, then steadily increases starting in 2013, with the highest rate in *2020*. That could be interesting. Let's compare these two years in terms of type of Offenses to see if we can detect any differences.
+#### Crime rate per year:
+
+If we examine the occurrence of crimes each year (2008-2020, 2021 removed due to partial data) as a fraction of total crimes, we get the following:
+
+```{r, echo=FALSE}
+# Create new theme for plot
+plot.theme1 = theme(
+  plot.title = element_text(size = 10, hjust = 0.5),
+  axis.title.x = element_text(size = 10),
+  axis.text.x = element_text(angle=45, hjust=1, size = 8),
+  axis.title.y = element_text(size = 10),
+  axis.text.y = element_text(size = 8))
+```
+
 
 ```{r, echo=FALSE}
 # extract pop estimate for years 2008 and 2009
@@ -98,66 +108,113 @@ crimes.pre2021.year["population"] = pop.by.year
 crimes.pre2021.year = mutate(crimes.pre2021.year,
                              crime.rate = (count/population)*100000)
 
+# plot of fraction of crime per year
+plot.fraction = ggplot(data = crimes.pre2021.year, mapping=aes(x=Report.Year, y=percent)) + 
+  geom_point() +
+  geom_line(group = 1) +
+  labs(x = "Year", y = "Fraction of crimes committed", title = "Percentage of crimes committed each year") +
+  plot.theme1
+
+# plot of crime per pop per year
 plot.rate = ggplot(data = crimes.pre2021.year, mapping=aes(x=Report.Year, y=crime.rate)) + 
   geom_point() +
   geom_line(group = 1) +
   labs(x = "Year", y = "Crime rate per 100,000 pop", title = "Crime rate per 100,000 population per year") +
-  theme(plot.title = element_text(hjust = 0.5))
+  plot.theme1
 
-par(mfrow=c(1,2))
-plot.percent
-plot.rate
+grid.arrange(plot.fraction, plot.rate, nrow=1, ncol=2)
+
 ```
 
+A simple plot (*on the left*) of crime counts per year over total crimes of all years (2021 removed due to partial data) shows that crimes drastically decreased in the years of 2011-2012, then steadily increased with the highest counts in 2020. There is a small dip in that can be noted in 2019. Therefore, it seems at first glance that after 2012, crimes increased in Seattle.
 
+However, a more telling plot of crime rate per 100,000 population (*on the right*) can help us examine our assumptions further. In fact, we can see that crime rate is actually very high in 2008 and 2009, and steadily decreased to the lowest level in 2012. Surprisingly, the small dip observed on the previous plot in 2019 revealed a more significant decline in crime rate per population. Last thing to note is that there is a increase of crime in 2020 that can be observed in both plots.
 
-```{r, fig.align="center", fig.height = 8, fig.width = 8, echo=FALSE, message=FALSE}
+Thus, let's examine the differences between year 2019 and 2020.
+
+```{r, fig.align="center", fig.height = 6, fig.width = 8, echo=FALSE, message=FALSE}
 
 year.pre2021 = crimes.pre2021 %>% 
   group_by(Offense, Report.Year) %>% 
   summarise(count=n())
-year.pre2021= mutate(year.pre2021,
-                     percent = count/sum(year.pre2021$count))
 
-# Create a reference data frame with all crimes in each year for later comparison.
-year.no.facet = subset(year.pre2021, select = c("percent", "Offense"))
+# select only year 2019 and 2020
+year.19.20 = filter(year.pre2021, Report.Year ==2020 | Report.Year ==2019)
 
-year.12.20 = filter(year.pre2021, Report.Year ==2020 | Report.Year ==2012)
+# find out top 5 crimes for both years
+year.19.20.merge = merge(year.19.20, crimes.pre2021.year, by = "Report.Year", all.x = T)
 
-# Create plot showing the percentage of crimes committed in 2012 and 2020 respective to all crimes in the same year
-ggplot(data = year.12.20, mapping=aes(x = percent, y = Offense)) + 
-  geom_point(data = year.no.facet, color="grey", size = 1.5) +
-  geom_point(size = 1.0) + facet_wrap(~Report.Year) +
-  labs(x = "Fraction of crimes committed", y = "Crimes", title = "Fraction of crimes committed in 2012 and 2020 by offense type") + theme(plot.title = element_text(hjust = 0))
+year.19.20.merge = mutate(year.19.20.merge,
+                          crime.rate.ind = (count.x/population)*100000)
+
+year.19.20.order = year.19.20.merge[order(-year.19.20.merge$crime.rate.ind, year.19.20.merge$Offense),]
+
+# Compute top 10 type of offenses and store in a vector
+x = unique(year.19.20.order$Offense)
+y = x[1:10]
+
+#subset top 10 offenses for 2019 and 2020
+year.19.20.subset = year.19.20.merge[year.19.20.merge$Offense %in% y,]
+
+ggplot(year.19.20.subset, aes(fill=Report.Year, y=crime.rate.ind, x=Offense)) +
+  geom_bar(position="dodge", stat="identity") +
+  labs(x = "Type of Offense", y = "Crime rate per 100,000 population", title = "Crime rate of top 10 Offenses in 2019 and 2020") + 
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x=element_text(angle=45,hjust=1))
 
 ```
 
-Interestingly (or not), other than **Identity Theft** which occurred at at the highest rate in 2020 compared to all previous years, the other most occurring crimes (in terms of fraction compared to total crimes in the year) seem to happen at a fairly similar rate. Those crimes include:
+#### 2019 vs 2020
 
-- Theft from Motor Vehicle
-- Simple Assault
-- Shoplifting
-- Motor Vehicle Theft
-- Destruction/Damage/Vandalism of Property
-- Burglary/Breaking & Entering
-- All Other Larceny
-- Aggravated Assault
+##### Offense Types:
+
+* **Identity Theft** is drastically high in 2020. Could the pandemic be a fertile ground for such activities given the new shift of work from home, unemployment benefits and online shopping? Coincidentally, this finding correlates with multiple reports which presents similar phenomenon in other communities throughout the country, such as [Florida](https://www.aarp.org/money/scams-fraud/info-2021/ftc-fraud-report-identity-theft-pandemic.html) or [California](https://sacramento.cbslocal.com/2020/09/15/edd-putting-people-risk-identity-theft/).
++ It should also be noted that the Seattle identity theft rate of **1273/100,000** is almost double than the Washington state rate of [**712/100,000**](https://www.iii.org/fact-statistic/facts-statistics-identity-theft-and-cybercrime)!
+
+* **Theft from Motor Vehicle** decreased from 2019. One could guess that remote working and unemployment resulted in less vehicles parked in the streets during work hours.
+
+* **Burglary/Breaking & Entering** increased in 2020. At first it may be counter-intuitive as one assumes people are at home all the time. It leads to the following question, are the location residences or commercial? Maybe commercial properties that are vacated during the pandemic became a prime target?
+
+Let's check this hypothesis before we move on.
+
+```{r, echo=F, message = FALSE}
+crimes.2020 = filter(crimes, Report.Year == 2020)
+
+# filter offense to only burglary and remove address where the value is empty
+crimes.2020.burglary = filter(crimes.2020, Offense == "Burglary/Breaking & Entering", X100.Block.Address != "")
+
+crimes.2020.burglary.address = crimes.2020.burglary %>% 
+  group_by(X100.Block.Address) %>% 
+  summarise(count=n())
+
+crimes.2020.burglary.address = crimes.2020.burglary.address[order(-crimes.2020.burglary.address$count),]
+
+# take the top 5 addresses
+crimes.2020.burglary.address.top = head(crimes.2020.burglary.address, 5)
+rownames(crimes.2020.burglary.address.top) = c()
+
+# Display data frame in a table.
+kable(crimes.2020.burglary.address.top, caption = "Top 5 X100 Block Address the highest number of Burglary/Breaking.", col.names = c("Block Address", "Total Count"))
+```
+* 12XX BLOCK OF HARRISON ST: in a residential area with many apartment buildings. Many of the ground floors of those buildings are for commercial use (restaurants, entertainments...)
+* 14XX BLOCK OF 2ND AVE: a few condo buildings and facing a high school.
+* 5XX BLOCK OF NE NORTHGATE WAY: in the center of a commercial district with many storefronts.
+* 8XX BLOCK OF NE 67TH ST: a few apartment buildings with an empty lot in construction.
+* 5XX BLOCK OF BROADWAY E: busy commercial district with many storefronts.
+
+From above observations, we cannot fully support our hypothesis. Although some addresses block are clearly commercial, others are more difficult to distinguish. We can only say that part of the breaking activities are targeted towards commercial establishments. However, it does not mean that it is not the same trend in the other years.
+
 
 Let's then examine those crimes in the year 2020, which remember, was the year with the highest crime occurrences.
 First, do the crimes differ in terms of hour of the day?
 
 ```{r, fig.align="center", fig.height = 8, fig.width = 8, echo=FALSE, message=FALSE}
 
-crimes.2020 = filter(crimes, Report.Year == 2020)
-
-crimes.2020.offense = filter(crimes.2020, Offense == "Theft from Motor Vehicle" | Offense == "Simple Assault" | Offense == "Motor Vehicle Theft" | Offense == "Identity Theft" | Offense == "Destruction/Damage/Vandalism of Property" | Offense == "Burglary/Breaking & Entering" | Offense == "All Other Larceny")
-
-hour.2020 = crimes.2020.offense %>% 
+hour.2020 = crimes.2020 %>% 
   group_by(Report.Hour) %>% 
   summarise(count=n()) %>% 
   mutate(percent = count/sum(count))
 
-hour.2020.offense = crimes.2020.offense %>% 
+hour.2020.offense = crimes.2020 %>% 
   group_by(Offense, Report.Hour) %>% 
   summarise(count=n()) %>% 
   mutate(percent = count/sum(count))
