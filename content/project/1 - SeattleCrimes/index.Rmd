@@ -323,4 +323,4 @@ This was a brief overview of some interesting aspects of the Seattle Crime datas
 - Midnight seem to be the time of day with the highest crime occurrences, which may or may not be contributed to systemic data entering. Noon is also a peak time for crimes.
 
 
-** This project's repository can be found on my [github](https://github.com/lilyportfolio/website) **
+** This project's repository can be found on my [github](https://github.com/lilyportfolio/website/tree/main/content/project/1%20-%20SeattleCrimes) **
