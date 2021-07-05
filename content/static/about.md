@@ -15,6 +15,6 @@ Current Business Intelligence and Data Analytics student at Carnegie Mellon Univ
 **Carnegie Mellon University**  
 MS in Information Technology (MSIT) -  BIDA  
 *Jan 2021 – Dec 2022*  
-GPA: 4.07/4.33   
+GPA: 4.11/4.33   
 - **Relevant courses:** Database Management, Exploring and Visualizing Data, Agile Methods (using R), Data Structures and Algorithms  
 - Upcoming courses: NoSQL Database Management, Decision Making Under Uncertainty
