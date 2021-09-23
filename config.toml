@@ -51,3 +51,7 @@ Learning everyday about my new passion: Data Science!
     identifier = "contacts"
     weight = 200
     url = "/static/contacts"
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
