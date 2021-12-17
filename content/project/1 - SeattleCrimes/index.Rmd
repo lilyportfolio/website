@@ -39,7 +39,7 @@ library(knitr)
 # load csv file.
 crimes = read.csv(file = "SEACrimes_2008_Present.csv")
 census00.10 = read.csv(file = "pop2000-2010.csv")
-census10.19 = read_excel("F:\\Lily\\Documents\\Portfolio\\website\\content\\project\\1 - SeattleCrimes\\pop2010-2019.xlsx", skip = 3)
+census10.19 = read_excel("H:\\Lily\\Documents\\Portfolio\\website\\content\\project\\1 - SeattleCrimes\\pop2010-2019.xlsx", skip = 3)
 names(census10.19)[names(census10.19) == "...1"] = "City.Name"
 ```
 
