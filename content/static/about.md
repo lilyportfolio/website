@@ -7,10 +7,10 @@ Current Business Intelligence and Data Analytics student at Carnegie Mellon Univ
 
 # Skills
 
-**Programming:** R, SQL, Java, Python (Numpy, PyTorch, Tensorflow)
-**Databases:** Oracle SQL 12c, NoSQL(Redis, Cassandra, Neo4j, MongoDB)
-**Data visualization and analysis:** R, Excel (Business analytics), Minitab
-**Deep learning programming experience** using AWS, Google Colab, Jupyter Notebook
+- **Programming:** R, SQL, Java, Python (Numpy, PyTorch, Tensorflow)
+- **Databases:** Oracle SQL 12c, NoSQL(Redis, Cassandra, Neo4j, MongoDB)
+- **Data visualization and analysis:** R, Excel (Business analytics), Minitab
+- **Deep learning programming experience** using AWS, Google Colab, Jupyter Notebook
 
 
 # Education
