@@ -19,7 +19,7 @@ We used [Quantitative Input Influence tool](https://www.andrew.cmu.edu/user/danu
 ## Flowchart
 The general process of evaluating our QII-aware sampling is shown in the following figure.
 
-[DL Project-Evaluation](https://user-images.githubusercontent.com/70864873/145465078-c13ae746-f0ed-4f8e-ad49-fd9b356ddafb.png)
+![DL Project-Evaluation](https://user-images.githubusercontent.com/70864873/145465078-c13ae746-f0ed-4f8e-ad49-fd9b356ddafb.png)
 
 
 ## File Explanation
