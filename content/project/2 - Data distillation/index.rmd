@@ -8,10 +8,6 @@ tags:
 comments: yes
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(collapse = TRUE)
-```
-
 ## Context
 
 In the era of data proliferation, processing and analyzing large amount of data while minimizing resource utilization is becoming an imminent area of research. Although the advancement of technology and storage has improved our abilities to extract meaningful insights from the data that we collect, the introduction of deep learning networks revealed severe limitations in our current abilities to process all data in an effective and efficient manner. This realization prompted many researchers to investigate methodologies that could reduce computation time and resources while retaining the accuracy of our insights. One way to approach this issue is via data distillation. In this paper, we investigated data distillation in the context of deep neural networks using a novel strategy: QII (Quantitative Input Influence) measures with 2019 American Community Survey dataset. We attempted to demonstrate that using inferences drawn from QII measures can successfully extract a smaller dataset that generates similar prediction accuracy when compared to the whole dataset. Although our work has not been completed to fully verify our hypothesis, we were able to show the potential of the QII measures for such use for future work.
@@ -75,8 +71,12 @@ To do data stratification based on the most important feature, run [exp_Stratifi
 
 ## Reference
 
-[Quantitative Input Influence Tool](https://github.com/cmu-transparency/tool-qii) <br />
+[Quantitative Input Influence Tool](https://github.com/cmu-transparency/tool-qii)
 [Anupam Data, Shayak Sen, and Yair Zick Algorithmic Transparency via Quantitative Input Influence: Theory and Experiments with Learning Systems](https://www.andrew.cmu.edu/user/danupam/datta-sen-zick-oakland16.pdf)
 
 
 ** This project's repository can be found on my [github](https://github.com/lilyportfolio/project_QII) **
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
