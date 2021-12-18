@@ -1,6 +1,6 @@
 ---
 title: "Data Distillation Using Quantitative Input Influence"
-date: '`r format(Sys.Date(), "%B %d, %Y")`'
+date: '2021-12-17'
 tags:
 - Deep Learning
 - Neural network

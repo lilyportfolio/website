@@ -1,6 +1,6 @@
 ---
 title: "Seattle Crimes EDA"
-date: '2021-07-01T21:42:38-07:00'
+date: '2021-07-01'
 tags:
 - Analytics
 - Storytelling
