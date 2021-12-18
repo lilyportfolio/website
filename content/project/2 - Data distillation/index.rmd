@@ -75,7 +75,7 @@ To do data stratification based on the most important feature, run [exp_Stratifi
 [Anupam Data, Shayak Sen, and Yair Zick Algorithmic Transparency via Quantitative Input Influence: Theory and Experiments with Learning Systems](https://www.andrew.cmu.edu/user/danupam/datta-sen-zick-oakland16.pdf)
 
 
-** This project's repository can be found on my [github](https://github.com/lilyportfolio/project_QII) **
+** This project's repository can be found on my [github](https://github.com/lilyportfolio/Data-Distilation-using-QII-measures) **
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE)
